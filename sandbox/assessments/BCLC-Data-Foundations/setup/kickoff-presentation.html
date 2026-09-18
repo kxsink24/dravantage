@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCLC Data Readiness Assessment - Kickoff</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/white.css">
+    <style>
+        /* Salesforce-inspired custom styling */
+        :root {
+            --sf-blue: #0176D3;
+            --sf-dark-blue: #032D60;
+            --sf-light-blue: #E3F3FF;
+            --bclc-green: #00754A;
+            --bclc-gold: #D4AF37;
+            --text-dark: #181818;
+            --text-medium: #3E3E3C;
+            --text-light: #706E6B;
+        }
+
+        .reveal {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 32px;
+            color: var(--text-dark);
+        }
+
+        .reveal h1 {
+            color: var(--sf-dark-blue);
+            font-size: 2.5em;
+            font-weight: 700;
+            text-transform: none;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal h2 {
+            color: var(--sf-blue);
+            font-size: 1.8em;
+            font-weight: 600;
+            text-transform: none;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal h3 {
+            color: var(--text-medium);
+            font-size: 1.3em;
+            font-weight: 600;
+            text-transform: none;
+        }
+
+        .reveal p, .reveal li {
+            font-size: 0.85em;
+            line-height: 1.5;
+            color: var(--text-medium);
+        }
+
+        .reveal strong {
+            color: var(--sf-blue);
+            font-weight: 600;
+        }
+
+        .reveal .slides section {
+            text-align: left;
+            padding: 2em;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, var(--sf-blue) 0%, var(--sf-dark-blue) 100%);
+            color: white;
+        }
+
+        .reveal .title-slide h1,
+        .reveal .title-slide h2,
+        .reveal .title-slide p {
+            color: white;
+        }
+
+        .callout-box {
+            background: var(--sf-light-blue);
+            border-left: 5px solid var(--sf-blue);
+            padding: 1em;
+            margin: 1em 0;
+            font-size: 0.8em;
+            border-radius: 4px;
+        }
+
+        .callout-box.warning {
+            background: #FFF4E5;
+            border-left-color: #FF9E2C;
+        }
+
+        .callout-box.success {
+            background: #E8F5E9;
+            border-left-color: var(--bclc-green);
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5em;
+            margin: 1em 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2em;
+            margin: 1em 0;
+        }
+
+        .pillar {
+            background: white;
+            border: 2px solid var(--sf-blue);
+            border-radius: 8px;
+            padding: 1.5em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .pillar h3 {
+            color: var(--sf-blue);
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+
+        .pillar ul {
+            font-size: 0.75em;
+            margin: 0;
+            padding-left: 1.2em;
+        }
+
+        table {
+            width: 100%;
+            font-size: 0.65em;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+
+        table th {
+            background: var(--sf-blue);
+            color: white;
+            padding: 0.8em;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 0.8em;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: var(--sf-light-blue);
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2em 0;
+            padding: 1em 0;
+            border-top: 3px solid var(--sf-blue);
+            border-bottom: 3px solid var(--sf-blue);
+            position: relative;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            font-size: 0.7em;
+        }
+
+        .timeline-item strong {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 0.5em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--sf-blue);
+            color: white;
+            padding: 0.3em 0.8em;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin: 0.2em;
+        }
+
+        .badge.warning {
+            background: #FF9E2C;
+        }
+
+        .badge.success {
+            background: var(--bclc-green);
+        }
+
+        .split-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1em;
+            margin: 1em 0;
+        }
+
+        .split-view .left {
+            background: #FFF4E5;
+            padding: 1.5em;
+            border-radius: 8px;
+        }
+
+        .split-view .right {
+            background: #E8F5E9;
+            padding: 1.5em;
+            border-radius: 8px;
+        }
+
+        .split-view h3 {
+            margin-top: 0;
+            font-size: 1em;
+        }
+
+        .split-view ul {
+            font-size: 0.75em;
+            margin: 0;
+            padding-left: 1.2em;
+        }
+
+        .contact-info {
+            font-size: 0.7em;
+            margin-top: 2em;
+            padding-top: 1em;
+            border-top: 2px solid var(--sf-blue);
+        }
+
+        /* Print styles */
+        @media print {
+            .reveal .slides section {
+                page-break-after: always;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .three-column, .two-column, .split-view {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3em;
+            margin: 2em 0;
+        }
+
+        .logo-placeholder {
+            width: 200px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title -->
+            <section class="title-slide">
+                <h1>Data Readiness Assessment</h1>
+                <h2>Building the Foundation for BCLC's September Convergence</h2>
+                <div class="logo-container">
+                    <div class="logo-placeholder">BCLC Logo</div>
+                    <div class="logo-placeholder">Salesforce Logo</div>
+                </div>
+                <p style="margin-top: 2em; font-size: 0.8em;">July 13, 2026 | Kickoff Meeting</p>
+                <aside class="notes">
+                    Welcome and thank executive sponsor Mark Goldberg. Acknowledge Marie-Noëlle (Marketing/Loyalty) and Kevin (Compliance) as key stakeholders. Frame this as a partnership to align data architecture to BCLC's mission: "generate win-wins for the greater good."
+                </aside>
+            </section>
+
+            <!-- Slide 2: September Convergence -->
+            <section>
+                <h2>Your September Convergence</h2>
+                <h3>Four Major Launches. One Data Foundation.</h3>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Melco Gaming</strong>
+                        <p>New casino platform<br>22 casinos</p>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Intralot Lottery</strong>
+                        <p>8,000 terminals<br>3,400 retail locations</p>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Rewards & Incentives</strong>
+                        <p>Drive 53%→64%<br>registration rate</p>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Future Anthem</strong>
+                        <p>Real-time AI<br>personalization</p>
+                    </div>
+                </div>
+
+                <div class="callout-box warning">
+                    <strong>All four initiatives depend on unified, real-time player data.</strong> If the data foundation is fragmented, all four are at risk.
+                </div>
+
+                <aside class="notes">
+                    These launches aren't independent — they're interdependent. Each requires streaming player data, identity resolution, and cross-channel orchestration. This DRA ensures the data layer is ready to support all four simultaneously. Acknowledge this is an ambitious timeline — our job is to help you de-risk it.
+                </aside>
+            </section>
+
+            <!-- Slide 3: Cullen Mandate -->
+            <section>
+                <h2>The Cullen Mandate</h2>
+                <h3>From Fragmented Compliance to Flawless 360-Degree Player View</h3>
+
+                <div class="split-view">
+                    <div class="left">
+                        <h3>Current State</h3>
+                        <ul>
+                            <li>Siloed systems: Everi (casino), PlayNow.com (online), retail lottery (anonymous), InfoSphere MDM (batch)</li>
+                            <li>Manual reconciliation between systems</li>
+                            <li>Delayed reporting to FINTRAC</li>
+                            <li>Blind spots below $10K threshold</li>
+                        </ul>
+                    </div>
+                    <div class="right">
+                        <h3>Future State</h3>
+                        <ul>
+                            <li>Unified Data360 activation layer</li>
+                            <li>Real-time streaming ingestion</li>
+                            <li>Automatic detection of "structuring" patterns</li>
+                            <li>Single auditable profile across all channels</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="callout-box warning">
+                    <strong>The 2022 Cullen Commission Report mandated a "flawless 360-degree player view."</strong> The August 2025 FINTRAC penalty ($1.075M) showed the cost of fragmented compliance data.
+                </div>
+
+                <aside class="notes">
+                    This isn't just a tech upgrade — it's a regulatory mandate with legal and financial consequences. FINTRAC eliminated the draft penalty review process; next penalty could be 40x larger under Bill C-2. Supreme Court (Ghotaymi v. BCLC) confirmed BCLC can apply preventative controls based on behavioral patterns — but only if systems can detect them in real time.
+                </aside>
+            </section>
+
+            <!-- Slide 4: Trapped Data -->
+            <section>
+                <h2>Trapped Data, Distinct Demands</h2>
+                <h3>Your Data Is Locked in Systems Built for Different Missions</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>System</th>
+                            <th>Primary Purpose</th>
+                            <th>Data Challenge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Everi (Casino)</strong></td>
+                            <td>Transaction tracking, FINTRAC reporting</td>
+                            <td>Batch exports; no streaming API to Data360</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PlayNow.com</strong></td>
+                            <td>Digital wagering, verified accounts</td>
+                            <td>Real-time but siloed from physical casino/lottery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Intralot (Retail Lottery)</strong></td>
+                            <td>Terminal validation, anonymous cash sales</td>
+                            <td>Limited identity data; cash doesn't link to profiles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>InfoSphere MDM</strong></td>
+                            <td>Master data governance</td>
+                            <td>Rigid schema, batch ETL, not real-time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Future Anthem</strong></td>
+                            <td>AI-driven personalization</td>
+                            <td>Requires streaming events — not currently available</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout-box">
+                    <strong>Each system was built to solve its own problem.</strong> None were designed to power a unified, real-time 360-degree view.
+                </div>
+
+                <aside class="notes">
+                    This is the "Trapped Data" dynamic. Each system is excellent at its job, but they don't talk to each other in real time. InfoSphere MDM established a "golden record" but can't activate it. Data360 is the activation layer that connects these systems without replacing them.
+                </aside>
+            </section>
+
+            <!-- Slide 5: AI Needs Grounded Data -->
+            <section>
+                <h2>Why This Matters</h2>
+                <h3>Agentforce Can't Operate on Fragmented, Stale Data</h3>
+
+                <div style="margin: 2em 0;">
+                    <div style="margin-bottom: 1.5em;">
+                        <span class="badge">Use Case 1</span>
+                        <p style="margin-left: 1em;"><strong>Terminal Diagnostics Agent</strong><br>
+                        Needs real-time logs from 8,000 Intralot terminals to detect printer jams, network drops</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5em;">
+                        <span class="badge">Use Case 2</span>
+                        <p style="margin-left: 1em;"><strong>High-Value Player Concierge</strong><br>
+                        Needs unified profile (casino play, online wagers, loyalty tier) to personalize offers</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5em;">
+                        <span class="badge">Use Case 3</span>
+                        <p style="margin-left: 1em;"><strong>Responsible Gaming Agent</strong><br>
+                        Needs streaming behavioral data to detect escalating risk and pause promotions instantly</p>
+                    </div>
+                </div>
+
+                <div class="callout-box warning">
+                    <strong>If your agents are grounded in stale, siloed data, they'll give wrong answers or miss critical events.</strong>
+                </div>
+
+                <aside class="notes">
+                    Agentforce is already in pilot at BCLC (3 enterprise seats). But agents are only as good as the data they're grounded in. Terminal diagnostics can't diagnose if it only sees batch exports from yesterday. Concierge can't personalize if it doesn't know the player just hit Elite tier two hours ago. This DRA ensures the data layer is ready before you scale beyond pilot.
+                </aside>
+            </section>
+
+            <!-- Slide 6: Framework -->
+            <section>
+                <h2>The Data Foundation Framework</h2>
+                <h3>Three Pillars to Enable Your September Convergence</h3>
+
+                <div class="three-column">
+                    <div class="pillar">
+                        <h3>UNLOCK</h3>
+                        <p style="font-size: 0.8em; margin-bottom: 0.5em;">Ingest and Integrate</p>
+                        <ul>
+                            <li><strong>Connect:</strong> Stream real-time events from Melco, Intralot, Everi, PlayNow.com</li>
+                            <li><strong>Integrate:</strong> Orchestrate data flows without rebuilding every integration</li>
+                        </ul>
+                    </div>
+                    <div class="pillar">
+                        <h3>TRUST</h3>
+                        <p style="font-size: 0.8em; margin-bottom: 0.5em;">Govern and Unify</p>
+                        <ul>
+                            <li><strong>Validate:</strong> Ensure audit-ready identity and transaction data</li>
+                            <li><strong>Protect:</strong> FIPPA privacy, FINTRAC security, governance controls</li>
+                            <li><strong>Unify:</strong> Resolve identity across all channels</li>
+                        </ul>
+                    </div>
+                    <div class="pillar">
+                        <h3>ACTIVATE</h3>
+                        <p style="font-size: 0.8em; margin-bottom: 0.5em;">Decide and Act</p>
+                        <ul>
+                            <li><strong>Decide:</strong> Real-time insights for Safer Play, promotions, loyalty</li>
+                            <li><strong>Orchestrate:</strong> Automate the relay race between systems</li>
+                            <li><strong>Act:</strong> Enable Agentforce to execute actions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <aside class="notes">
+                    This framework is the backbone of the DRA — we'll score BCLC on each capability. Unlock is critical given your September convergence — you need streaming data, not batch. Trust is mandated by Cullen Report and FINTRAC. Activate is where business value shows up.
+                </aside>
+            </section>
+
+            <!-- Slide 7: Current Architecture -->
+            <section>
+                <h2>Current State Architecture</h2>
+                <h3>Your Data Landscape Today</h3>
+
+                <div style="font-size: 0.7em;">
+                    <p><strong>Layer 1 — Data Sources:</strong></p>
+                    <p style="margin-left: 1em;">Everi GMS (casino) • PlayNow.com (digital) • Intralot Lotos X Omni (retail) • Future Anthem Amplifier AI (promotions) • Salesforce CRM</p>
+
+                    <p style="margin-top: 1em;"><strong>Layer 2 — Integration:</strong></p>
+                    <p style="margin-left: 1em;">
+                        <span class="badge warning">Gap Noted</span> MuleSoft discontinued — what integration pattern is replacing it?<br>
+                        Batch ETL via InfoSphere DataStage • AWS S3 intermediate staging
+                    </p>
+
+                    <p style="margin-top: 1em;"><strong>Layer 3 — Storage / MDM:</strong></p>
+                    <p style="margin-left: 1em;">IBM InfoSphere MDM (legacy — being replaced) • Salesforce Data360 (new activation layer)</p>
+
+                    <p style="margin-top: 1em;"><strong>Layer 4 — Activation:</strong></p>
+                    <p style="margin-left: 1em;">Salesforce Marketing Cloud • Future Anthem • Agentforce (pilot)</p>
+
+                    <p style="margin-top: 1em;"><strong>Layer 5 — Experience:</strong></p>
+                    <p style="margin-left: 1em;">PlayNow.com • Casino floor kiosks • Retail lottery terminals • Contact center (Talkdesk)</p>
+                </div>
+
+                <div class="callout-box warning" style="margin-top: 1.5em;">
+                    <strong>Open Question:</strong> With MuleSoft discontinued, how are Melco and Intralot streaming data to Data360?
+                </div>
+
+                <aside class="notes">
+                    This is our hypothesis architecture based on research. We'll validate during interviews. The MuleSoft discontinuation is a known risk — we need to understand the replacement integration strategy. If there's no replacement, Data360 becomes even more critical as the native integration layer.
+                </aside>
+            </section>
+
+            <!-- Slide 8: Target Architecture -->
+            <section>
+                <h2>Target State Architecture</h2>
+                <h3>A Real-Time Activation Layer on Top of Existing Systems</h3>
+
+                <div style="text-align: center; margin: 2em 0;">
+                    <div style="background: var(--sf-light-blue); padding: 2em; border-radius: 8px; display: inline-block;">
+                        <h3 style="margin: 0; color: var(--sf-blue);">Data360 Hub</h3>
+                        <div style="margin-top: 1em; font-size: 0.7em; text-align: left;">
+                            <p><strong>Streaming Ingestion:</strong> Melco, Intralot, PlayNow.com push events in real time</p>
+                            <p><strong>Batch Ingestion:</strong> Everi, legacy systems push nightly reconciliation</p>
+                            <p><strong>Identity Resolution:</strong> Customer 360 Data Model maps all sources to unified profiles</p>
+                            <p><strong>Activation:</strong> Marketing Cloud, Agentforce, Future Anthem pull from Data360</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="callout-box success">
+                    <strong>Key Principle:</strong> Data360 doesn't replace your systems of record — it unifies and activates them.
+                </div>
+
+                <aside class="notes">
+                    This is a "headless 360" architecture — data is formatted for AI and real-time activation, not just dashboards. InfoSphere MDM remains the legal system of record for compliance audits, but Data360 is the operational activation layer. Future Anthem and Agentforce read from Data360, not five different databases. New systems integrate once to Data360, not to every downstream consumer.
+                </aside>
+            </section>
+
+            <!-- Slide 9: Profile Unification -->
+            <section>
+                <h2>Profile Unification</h2>
+                <h3>Resume the Slalom Work (With a Stable Foundation)</h3>
+
+                <div class="timeline" style="flex-direction: column; align-items: flex-start; border: none; padding: 0;">
+                    <div style="display: flex; width: 100%; margin-bottom: 1em;">
+                        <div style="flex: 0 0 150px; font-weight: 600; color: var(--sf-blue);">2021-2023</div>
+                        <div style="flex: 1; font-size: 0.8em;">Slalom CDP project initiated (Customer 360 Audiences → Salesforce CDP → Genie)</div>
+                    </div>
+                    <div style="display: flex; width: 100%; margin-bottom: 1em;">
+                        <div style="flex: 0 0 150px; font-weight: 600; color: var(--sf-blue);">2023-2024</div>
+                        <div style="flex: 1; font-size: 0.8em;">Project paused due to rapid product evolution and naming changes</div>
+                    </div>
+                    <div style="display: flex; width: 100%; margin-bottom: 1em;">
+                        <div style="flex: 0 0 150px; font-weight: 600; color: var(--sf-blue);">2024-2025</div>
+                        <div style="flex: 1; font-size: 0.8em;">Salesforce stabilizes on Data Cloud, then rebrands to Data360</div>
+                    </div>
+                    <div style="display: flex; width: 100%;">
+                        <div style="flex: 0 0 150px; font-weight: 600; color: var(--bclc-green);">2026</div>
+                        <div style="flex: 1; font-size: 0.8em;"><strong>BCLC resumes profile unification with stable Data360 architecture</strong></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2em;">
+                    <p style="font-size: 0.8em;"><strong>What's Different Now:</strong></p>
+                    <ul style="font-size: 0.75em;">
+                        <li>Data360 is production-ready with native Customer 360 Data Model</li>
+                        <li>Identity resolution rules are more flexible (fuzzy matching, probabilistic linking)</li>
+                        <li>Native connectors to Salesforce CRM, Marketing Cloud, Agentforce</li>
+                    </ul>
+                </div>
+
+                <div class="callout-box success">
+                    <strong>The pause wasn't a failure — it was smart.</strong> You waited for a stable platform. Now it's time to resume.
+                </div>
+
+                <aside class="notes">
+                    Acknowledge the frustration of the pause — product instability was real. But BCLC made the right call to wait. Data360 is now the long-term platform. Slalom's prior work can be reused.
+                </aside>
+            </section>
+
+            <!-- Slide 10: Identity Resolution -->
+            <section>
+                <h2>Identity Resolution Challenge</h2>
+                <h3>Four Channels, One Player — How Do You Link Them?</h3>
+
+                <div class="two-column" style="font-size: 0.75em;">
+                    <div>
+                        <p><strong>Channels:</strong></p>
+                        <ol>
+                            <li><strong>PlayNow.com</strong> — Verified identity (photo ID, credit check)</li>
+                            <li><strong>Casino Floor</strong> — Loyalty card, credit card hash, sometimes anonymous</li>
+                            <li><strong>Retail Lottery</strong> — Mostly anonymous; credit card hash for large prizes</li>
+                            <li><strong>Rewards Program</strong> — Opt-in registration with email, phone, address</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <p><strong>Matching Rules (Open Questions):</strong></p>
+                        <ul>
+                            <li>Email + phone number (high confidence)</li>
+                            <li>Credit card hash across channels (medium confidence, privacy constraints)</li>
+                            <li>Name + birthdate + postal code (fuzzy match, duplicate risk)</li>
+                            <li>Device fingerprint + location data (online only, requires consent)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="callout-box warning">
+                    <strong>FIPPA and Cullen Report mandate consent and auditability.</strong> What identity resolution rules will BCLC authorize?
+                </div>
+
+                <aside class="notes">
+                    This is the hardest technical and legal problem. Cullen demands 360-degree view, but FIPPA demands privacy and consent. BCLC must decide which matching rules are acceptable. Data360 can handle fuzzy matches, but BCLC must define confidence thresholds. We'll workshop this during interviews.
+                </aside>
+            </section>
+
+            <!-- Slide 11: Real-Time vs Batch -->
+            <section>
+                <h2>Real-Time vs. Batch</h2>
+                <h3>Compliance and Personalization Both Require Real-Time Data</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capability</th>
+                            <th>Batch (Current)</th>
+                            <th>Real-Time (Target)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Detect "structuring" below $10K</strong></td>
+                            <td>Detected in nightly audit (too late to intervene)</td>
+                            <td>Detected within seconds; patron flagged before next transaction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Safer Play intervention</strong></td>
+                            <td>Player notified next login (hours or days)</td>
+                            <td>On-screen GameSense prompt appears immediately</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Loyalty tier promotion</strong></td>
+                            <td>Player sees new Elite benefits next day</td>
+                            <td>Concierge agent congratulates player within 60 seconds</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Future Anthem personalization</strong></td>
+                            <td>Batch segment export overnight</td>
+                            <td>Streaming events trigger instant offer</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout-box">
+                    <strong>If you can't act in real time, you can't protect players or delight them.</strong>
+                </div>
+
+                <aside class="notes">
+                    Batch is fine for back-office reconciliation. But compliance and engagement both require real-time. The $9,500 buy-in example: if Everi only exports once a day, AML can't intervene until tomorrow. By then, player has structured $30K across three casinos. Real-time streaming closes this gap.
+                </aside>
+            </section>
+
+            <!-- Slide 12: Agentforce Blockers -->
+            <section>
+                <h2>Agentforce Readiness</h2>
+                <h3>Your Agents Are in Pilot — What's Stopping Production Scale?</h3>
+
+                <div style="margin: 2em 0;">
+                    <div style="margin-bottom: 2em;">
+                        <span class="badge warning">Blocker 1</span>
+                        <p style="margin-left: 1em; font-size: 0.8em;"><strong>Data Quality / Completeness</strong><br>
+                        Unified profiles are incomplete (missing loyalty tier, source-of-funds, play history). Agents give wrong answers or say "I don't have that information."</p>
+                    </div>
+
+                    <div style="margin-bottom: 2em;">
+                        <span class="badge warning">Blocker 2</span>
+                        <p style="margin-left: 1em; font-size: 0.8em;"><strong>Real-Time Integration Gaps</strong><br>
+                        Agents can't access live system data (Everi, Melco, Intralot). By the time agents see data, it's stale.</p>
+                    </div>
+
+                    <div style="margin-bottom: 2em;">
+                        <span class="badge warning">Blocker 3</span>
+                        <p style="margin-left: 1em; font-size: 0.8em;"><strong>Write-Back Governance</strong><br>
+                        Agents can read data but can't write back to systems of record. Can't auto-flag high-risk players in Everi or pause promotions in Future Anthem.</p>
+                    </div>
+                </div>
+
+                <div class="callout-box">
+                    <strong>Agentforce is only as good as the data it's grounded in. Fix the foundation first.</strong>
+                </div>
+
+                <aside class="notes">
+                    BCLC has 3 Agentforce enterprise seats in pilot. Terminal diagnostics and concierge are excellent starting points. But to scale beyond pilot, you need unified, real-time, write-enabled data. This DRA defines the roadmap to remove these blockers.
+                </aside>
+            </section>
+
+            <!-- Slide 13: Deliverables -->
+            <section>
+                <h2>What This Assessment Will Deliver</h2>
+                <h3>A Roadmap Aligned to Your September 2026 Launches</h3>
+
+                <div style="font-size: 0.75em;">
+                    <ol>
+                        <li style="margin-bottom: 1em;"><strong>Capability Maturity Scorecard</strong><br>
+                        Where you are today across all 9 capabilities (Connect, Integrate, Understand, Validate, Protect, Unify, Decide, Orchestrate, Act)</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Prioritized Gap Analysis</strong><br>
+                        Which gaps are blockers for September convergence vs. long-term optimizations</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Crawl / Walk / Run Roadmap</strong><br>
+                        Phased plan with MVP (Crawl), scale (Walk), and optimize (Run) milestones</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Salesforce Positioning</strong><br>
+                        How Data360, Marketing Cloud, Agentforce fit into your target architecture</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Business Case</strong><br>
+                        Labor cost of manual workarounds, compliance risk reduction, loyalty registration lift</li>
+                    </ol>
+                </div>
+
+                <div style="margin-top: 1.5em; font-size: 0.7em; background: var(--sf-light-blue); padding: 1em; border-radius: 8px;">
+                    <strong>Timeline:</strong> Kickoff July 13 → Interviews July 14 - Aug 15 → Analysis Aug 16 - Sep 10 → Readout Sep 15 (ahead of your September go-lives)
+                </div>
+
+                <aside class="notes">
+                    This isn't a science project — it's a business-driven roadmap. We'll align to March 2027 Core renewal and April 2027 Marketing Cloud renewal. Prioritize what must be done before September convergence vs. what can wait.
+                </aside>
+            </section>
+
+            <!-- Slide 14: Process -->
+            <section>
+                <h2>The DRA Process</h2>
+                <h3>What to Expect Over the Next 8 Weeks</h3>
+
+                <div style="font-size: 0.75em;">
+                    <div style="margin-bottom: 1.5em;">
+                        <h3 style="color: var(--sf-blue); font-size: 1em;">Phase 1 — Discovery (July 14 - August 15)</h3>
+                        <ul>
+                            <li>12-15 stakeholder interviews (60 min each)</li>
+                            <li>Survey aggregation and persona mapping</li>
+                            <li>Technical architecture validation (system integrations, data flows, latency measurements)</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 1.5em;">
+                        <h3 style="color: var(--sf-blue); font-size: 1em;">Phase 2 — Analysis (August 16 - September 10)</h3>
+                        <ul>
+                            <li>Capability scoring (1-3 scale per DRA rubric)</li>
+                            <li>Gap prioritization (High/Med/Low impact)</li>
+                            <li>Roadmap sequencing (Crawl/Walk/Run)</li>
+                            <li>Salesforce solution mapping</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--bclc-green); font-size: 1em;">Phase 3 — Readout (September 15)</h3>
+                        <ul>
+                            <li>Executive presentation to Mark Goldberg and leadership team</li>
+                            <li>Q&A and roadmap refinement</li>
+                            <li>Handoff to implementation teams</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <aside class="notes">
+                    We'll adapt schedule to BCLC availability. Interviews are confidential. We'll validate hypothesis architecture during interviews (especially MuleSoft replacement).
+                </aside>
+            </section>
+
+            <!-- Slide 15: Stakeholders -->
+            <section>
+                <h2>Stakeholders We Need to Interview</h2>
+
+                <div class="three-column" style="font-size: 0.7em;">
+                    <div>
+                        <h3 style="font-size: 1em;">Executive Sponsors</h3>
+                        <ul>
+                            <li>Mark Goldberg (CIO/CDO)</li>
+                            <li>Marie-Noëlle Savoie (Chief Marketing & Social Purpose)</li>
+                            <li>Kevin deBruyckere (Chief Compliance Officer)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1em;">Data & IT Leaders</h3>
+                        <ul>
+                            <li>Data360 implementation lead</li>
+                            <li>IT architecture / integration lead</li>
+                            <li>InfoSphere MDM admin (if still in role)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1em;">Business Users</h3>
+                        <ul>
+                            <li>Marketing Cloud / loyalty program lead</li>
+                            <li>Safer Play / AML analyst</li>
+                            <li>Contact center / customer service lead</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2em; font-size: 0.75em;">
+                    <p><strong>Plus (if available):</strong></p>
+                    <ul>
+                        <li>Slalom (CDP project lead — lessons learned)</li>
+                        <li>Future Anthem (AnthemXT hub lead)</li>
+                    </ul>
+                </div>
+
+                <p style="font-size: 0.75em; margin-top: 1.5em;"><strong>Target:</strong> 12-15 interviews total. Account team will coordinate scheduling.</p>
+
+                <aside class="notes">
+                    We need a mix of executive, technical, and frontline users. Account team coordinates via interview confirmation emails.
+                </aside>
+            </section>
+
+            <!-- Slide 16: Open Questions -->
+            <section>
+                <h2>Open Questions for Discussion</h2>
+                <h3>What We Need Your Help to Answer</h3>
+
+                <div style="font-size: 0.75em;">
+                    <ol>
+                        <li style="margin-bottom: 1em;"><strong>MuleSoft Replacement:</strong> With MuleSoft discontinued, what integration pattern is replacing it for Melco/Intralot streaming?</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Slalom Pause:</strong> What were the primary blockers in the Slalom CDP project, and what needs to be different this time?</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Identity Resolution Rules:</strong> What matching rules will BCLC authorize to link anonymous retail transactions to verified PlayNow.com profiles?</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Write-Back Permissions:</strong> Can Data360 / Agentforce write back to Everi to flag high-risk players, or is it read-only?</li>
+
+                        <li style="margin-bottom: 1em;"><strong>DRI Accountability:</strong> Who is the single-threaded leader accountable for delivering the unified 360-degree player view by your September 2026 go-lives?</li>
+
+                        <li style="margin-bottom: 1em;"><strong>Safer Play Capacity:</strong> Does Kevin's team have operational capacity to handle real-time automated alerts from Data360/Future Anthem?</li>
+                    </ol>
+                </div>
+
+                <aside class="notes">
+                    We don't expect answers to all questions today. These are the big unknowns that will shape the roadmap. We'll dig into these during interviews.
+                </aside>
+            </section>
+
+            <!-- Slide 17: Success Criteria -->
+            <section>
+                <h2>Success Criteria</h2>
+                <h3>How Will We Know This DRA Succeeded?</h3>
+
+                <div style="font-size: 0.75em;">
+                    <div class="two-column">
+                        <div>
+                            <p><span class="badge success">1</span> <strong>September Convergence</strong><br>
+                            All four platforms launch on schedule with real-time data flowing to Data360</p>
+
+                            <p><span class="badge success">2</span> <strong>Cullen Compliance</strong><br>
+                            Unified 360-degree view is audit-ready; "structuring" detection is real-time</p>
+
+                            <p><span class="badge success">3</span> <strong>Loyalty Registration</strong><br>
+                            Clear path to 53%→64% rate via personalized offers and cross-channel tracking</p>
+                        </div>
+                        <div>
+                            <p><span class="badge success">4</span> <strong>Agentforce Scale</strong><br>
+                            Terminal diagnostics and concierge agents exit pilot, enter production by Q4 2026</p>
+
+                            <p><span class="badge success">5</span> <strong>Labor Reduction</strong><br>
+                            Eliminate manual reconciliation — quantify hours saved per week</p>
+
+                            <p><span class="badge success">6</span> <strong>FINTRAC Confidence</strong><br>
+                            Kevin's team can file STRs and LCTRs with complete cross-channel data</p>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="notes">
+                    These are the outcomes BCLC cares about — not just "implement Data360." We'll refine during kickoff and validate during interviews. Roadmap will sequence initiatives to deliver these in priority order.
+                </aside>
+            </section>
+
+            <!-- Slide 18: Next Steps -->
+            <section>
+                <h2>Next Steps</h2>
+                <h3>What Happens After Today</h3>
+
+                <div style="font-size: 0.75em;">
+                    <div style="margin-bottom: 1.5em;">
+                        <h3 style="color: var(--sf-blue); font-size: 1em;">Immediate (This Week)</h3>
+                        <ul>
+                            <li>Survey distribution (due July 9)</li>
+                            <li>Interview scheduling (Robert Lindsley coordinating)</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 1.5em;">
+                        <h3 style="color: var(--sf-blue); font-size: 1em;">Discovery Phase (July 14 - August 15)</h3>
+                        <ul>
+                            <li>12-15 stakeholder interviews</li>
+                            <li>Technical architecture validation</li>
+                            <li>Gap analysis and capability scoring</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 1.5em;">
+                        <h3 style="color: var(--sf-blue); font-size: 1em;">Analysis Phase (August 16 - September 10)</h3>
+                        <ul>
+                            <li>Roadmap drafting (Crawl/Walk/Run)</li>
+                            <li>Business case and ROI modeling</li>
+                            <li>Executive review and refinement</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--bclc-green); font-size: 1em;">Readout (September 15)</h3>
+                        <ul>
+                            <li>Final presentation to Mark Goldberg and leadership</li>
+                            <li>Handoff to implementation teams</li>
+                            <li>Alignment to your September 2026 launches</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <aside class="notes">
+                    Tight timeline to deliver ahead of your September go-lives. Survey responses by July 9 critical. Account team coordinates logistics.
+                </aside>
+            </section>
+
+            <!-- Slide 19: Thank You -->
+            <section class="title-slide">
+                <h2>Thank You</h2>
+                <h1>Let's Build the Foundation for BCLC's Next Chapter</h1>
+
+                <div style="margin: 2em 0; font-size: 0.8em;">
+                    <p style="font-style: italic;">"Generate win-wins for the greater good"</p>
+                </div>
+
+                <p style="margin-top: 2em; font-size: 0.8em;">This DRA is about more than data — it's about enabling BCLC to fulfill its mission. Safer players, more engaging experiences, and flawless compliance. All grounded in a unified, real-time data foundation.</p>
+
+                <div class="contact-info" style="color: white; border-color: rgba(255,255,255,0.3);">
+                    <p><strong>Patrick Miner</strong> | pminer@salesforce.com | SE Architect, DRA Lead</p>
+                    <p><strong>Cameron Tait</strong> | cameron.tait@salesforce.com | Named Account Executive</p>
+                    <p><strong>Robert Lindsley</strong> | rlindsley@salesforce.com | DRA Execution Lead</p>
+                </div>
+
+                <aside class="notes">
+                    Open floor for questions. Confirm survey distribution and interview scheduling. Thank Mark Goldberg for sponsorship. Acknowledge complexity of September convergence and express confidence in partnership.
+                </aside>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            controls: true,
+            progress: true,
+            center: false,
+            slideNumber: 'c/t',
+            showNotes: false,
+            width: 1280,
+            height: 720,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0,
+            keyboard: {
+                83: function() {
+                    // Press 's' to open speaker notes
+                    Reveal.configure({ showNotes: !Reveal.getConfig().showNotes });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
