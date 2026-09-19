@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SBA Executive Readout — OneSBA Data Foundation</title>
+    <style>
+      /* ===========================================
+         DRAVANTAGE / KINETIC AUTHORITY THEME
+         Standalone, no external fonts or assets.
+         =========================================== */
+      :root {
+        --white: #ffffff;
+        --cloud-95: #eaf5fe;
+        --cloud-80: #90d0fe;
+        --cloud-68: #00b3ff;
+        --electric-50: #066afe;
+        --electric-30: #022ac0;
+        --electric-15: #001e5b;
+        --kinetic-navy: #001b3f;
+        --kinetic-blue: #0176d3;
+        --teal-80: #04e1cb;
+        --violet-65: #d17dfe;
+        --surface: #f9f9ff;
+        --surface-container: #e8eeff;
+        --surface-container-high: #dfe8ff;
+        --outline: #c0c7d4;
+        --muted: #414752;
+        --font-display: "ITC Avant Garde for Salesforce", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+        --font-body: "Salesforce Sans", "Avenir Next", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --grad-evening: linear-gradient(135deg, #001e5b 0%, #022ac0 48%, #066afe 76%, #00b3ff 100%);
+        --title-size: clamp(2rem, 5.6vw, 5.25rem);
+        --h2-size: clamp(1.55rem, 3.25vw, 3rem);
+        --h3-size: clamp(1rem, 1.7vw, 1.45rem);
+        --body-size: clamp(0.82rem, 1.32vw, 1.14rem);
+        --small-size: clamp(0.62rem, 0.82vw, 0.8rem);
+        --slide-padding: clamp(1.1rem, 4.2vw, 4.4rem);
+        --content-gap: clamp(0.7rem, 1.8vw, 1.7rem);
+        --element-gap: clamp(0.35rem, 0.9vw, 0.8rem);
+        --card-radius: clamp(0.7rem, 1vw, 1.2rem);
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        --duration-normal: 0.6s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* ===========================================
+         VIEWPORT FITTING: MANDATORY BASE STYLES
+         Copied in full from frontend-slides.
+         =========================================== */
+      html, body {
+          height: 100%;
+          overflow-x: hidden;
+      }
+
+      html {
+          scroll-snap-type: y mandatory;
+          scroll-behavior: smooth;
+      }
+
+      .slide {
+          width: 100vw;
+          height: 100vh;
+          height: 100dvh;
+          overflow: hidden;
+          scroll-snap-align: start;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+      }
+
+      .slide-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          max-height: 100%;
+          overflow: hidden;
+          padding: var(--slide-padding);
+      }
+
+      :root {
+          --title-size: clamp(1.5rem, 5vw, 4rem);
+          --h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+          --h3-size: clamp(1rem, 2.5vw, 1.75rem);
+          --body-size: clamp(0.75rem, 1.5vw, 1.125rem);
+          --small-size: clamp(0.65rem, 1vw, 0.875rem);
+          --slide-padding: clamp(1rem, 4vw, 4rem);
+          --content-gap: clamp(0.5rem, 2vw, 2rem);
+          --element-gap: clamp(0.25rem, 1vw, 1rem);
+      }
+
+      .card, .container, .content-box {
+          max-width: min(90vw, 1000px);
+          max-height: min(80vh, 700px);
+      }
+
+      .feature-list, .bullet-list {
+          gap: clamp(0.4rem, 1vh, 1rem);
+      }
+
+      .feature-list li, .bullet-list li {
+          font-size: var(--body-size);
+          line-height: 1.4;
+      }
+
+      .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+          gap: clamp(0.5rem, 1.5vw, 1rem);
+      }
+
+      img, .image-container {
+          max-width: 100%;
+          max-height: min(50vh, 400px);
+          object-fit: contain;
+      }
+
+      @media (max-height: 700px) {
+          :root {
+              --slide-padding: clamp(0.75rem, 3vw, 2rem);
+              --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+              --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+              --h2-size: clamp(1rem, 3vw, 1.75rem);
+          }
+      }
+
+      @media (max-height: 600px) {
+          :root {
+              --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+              --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+              --title-size: clamp(1.1rem, 4vw, 2rem);
+              --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+          }
+
+          .nav-dots, .keyboard-hint, .decorative {
+              display: none;
+          }
+      }
+
+      @media (max-height: 500px) {
+          :root {
+              --slide-padding: clamp(0.4rem, 2vw, 1rem);
+              --title-size: clamp(1rem, 3.5vw, 1.5rem);
+              --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+              --body-size: clamp(0.65rem, 1vw, 0.85rem);
+          }
+      }
+
+      @media (max-width: 600px) {
+          :root {
+              --title-size: clamp(1.25rem, 7vw, 2.5rem);
+          }
+
+          .grid {
+              grid-template-columns: 1fr;
+          }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+              animation-duration: 0.01ms !important;
+              transition-duration: 0.2s !important;
+          }
+
+          html {
+              scroll-behavior: auto;
+          }
+      }
+
+      /* ===========================================
+         SHARED DECK COMPONENTS
+         =========================================== */
+      body {
+        background: var(--surface);
+        color: var(--electric-15);
+        font-family: var(--font-body);
+        font-size: var(--body-size);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1, h2, h3, p { max-width: 100%; }
+      h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.035em; }
+      p { line-height: 1.42; }
+
+      .slide.light { background: var(--surface); }
+      .slide.dark { background: var(--kinetic-navy); color: var(--white); }
+      .slide.blue { background: var(--cloud-95); }
+
+      .topline {
+        position: absolute;
+        top: clamp(0.75rem, 2.4vw, 2rem);
+        left: var(--slide-padding);
+        right: var(--slide-padding);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 3;
+      }
+
+      .wordmark {
+        color: currentColor;
+        font-family: var(--font-display);
+        font-size: var(--small-size);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        color: var(--cloud-68);
+        font-family: var(--font-display);
+        font-size: var(--small-size);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .dark .eyebrow { color: var(--cloud-80); }
+      .page-number { color: var(--muted); font-size: var(--small-size); }
+      .dark .page-number { color: rgba(255,255,255,0.62); }
+
+      .section-title {
+        color: var(--electric-30);
+        font-size: var(--h2-size);
+        line-height: 0.98;
+        max-width: clamp(20rem, 72vw, 68rem);
+      }
+
+      .dark .section-title { color: var(--white); }
+      .section-subtitle { color: var(--muted); margin-top: var(--element-gap); max-width: clamp(25rem, 68vw, 64rem); }
+      .dark .section-subtitle { color: rgba(255,255,255,0.76); }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(clamp(0.5rem, 1.4vw, 1.4rem));
+        transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo);
+      }
+
+      .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+      .slide.visible .reveal:nth-child(1) { transition-delay: 0.08s; }
+      .slide.visible .reveal:nth-child(2) { transition-delay: 0.16s; }
+      .slide.visible .reveal:nth-child(3) { transition-delay: 0.24s; }
+      .slide.visible .reveal:nth-child(4) { transition-delay: 0.32s; }
+      .slide.visible .reveal:nth-child(5) { transition-delay: 0.4s; }
+      .slide.visible .reveal:nth-child(6) { transition-delay: 0.48s; }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border: 1px solid var(--outline);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: var(--small-size);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: clamp(0.25rem, 0.55vw, 0.45rem) clamp(0.5rem, 1vw, 0.85rem);
+        text-transform: uppercase;
+      }
+
+      .pill.cyan { border-color: var(--cloud-68); color: var(--kinetic-blue); background: rgba(255,255,255,0.45); }
+      .pill.dark-pill { border-color: rgba(255,255,255,0.28); color: var(--cloud-80); }
+
+      .card-shell {
+        background: var(--white);
+        border: 1px solid rgba(192,199,212,0.82);
+        border-radius: var(--card-radius);
+        box-shadow: 0 clamp(0.15rem, 0.5vw, 0.45rem) clamp(0.75rem, 1.8vw, 1.8rem) rgba(0,30,91,0.08);
+      }
+
+      .blue .card-shell { background: rgba(255,255,255,0.68); border-color: rgba(164,201,255,0.9); box-shadow: none; }
+      .dark .card-shell { background: rgba(255,255,255,0.08); border-color: rgba(164,201,255,0.28); box-shadow: none; }
+
+      .accent-rail { border-left: clamp(0.2rem, 0.4vw, 0.35rem) solid var(--cloud-68); }
+      .accent-rail.teal { border-left-color: var(--teal-80); }
+      .accent-rail.violet { border-left-color: var(--violet-65); }
+
+      .source-note {
+        color: var(--muted);
+        font-size: var(--small-size);
+        line-height: 1.25;
+        margin-top: auto;
+        padding-top: var(--element-gap);
+      }
+
+      .dark .source-note { color: rgba(255,255,255,0.6); }
+
+      /* ===========================================
+         SLIDE 1: TITLE HERO
+         =========================================== */
+      .slide.hero { background: var(--grad-evening); }
+      .hero .slide-content {
+        background: transparent;
+        max-width: none;
+        padding: var(--slide-padding);
+        justify-content: flex-end;
+        isolation: isolate;
+        z-index: 1;
+      }
+
+      .hero .slide-content::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0,30,91,0.32), transparent 65%);
+        z-index: -1;
+      }
+
+      .hero-copy { position: relative; z-index: 2; max-width: clamp(22rem, 64vw, 70rem); padding-bottom: clamp(1.5rem, 7vh, 6rem); }
+      .hero h1 { color: var(--white); font-size: var(--title-size); line-height: 0.94; max-width: clamp(24rem, 70vw, 72rem); }
+      .hero .hero-subtitle { color: var(--cloud-80); font-size: clamp(1rem, 2vw, 1.7rem); margin-top: clamp(0.8rem, 2vw, 1.7rem); max-width: clamp(22rem, 52vw, 50rem); }
+      .hero .date { color: rgba(255,255,255,0.78); font-size: var(--body-size); margin-top: clamp(1.5rem, 5vh, 3.5rem); }
+      .hero .hero-kicker { margin-bottom: clamp(0.8rem, 2vh, 1.4rem); }
+
+      .hero-art { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+      .hero-art .orbit { position: absolute; width: clamp(19rem, 43vw, 43rem); aspect-ratio: 1; right: clamp(-12rem, -5vw, -3rem); top: clamp(3rem, 12vh, 10rem); border: 1px solid rgba(164,201,255,0.42); border-radius: 50%; transform: rotate(-18deg); }
+      .hero-art .orbit::before, .hero-art .orbit::after { content: ""; position: absolute; inset: 12%; border: 1px solid rgba(164,201,255,0.28); border-radius: 50%; }
+      .hero-art .orbit::after { inset: 29%; border-color: rgba(4,225,203,0.48); }
+      .hero-art .core { position: absolute; right: clamp(4rem, 18vw, 18rem); top: clamp(11rem, 37vh, 24rem); width: clamp(5.5rem, 11vw, 10rem); aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,0.96); border: clamp(0.25rem, 0.5vw, 0.5rem) solid rgba(0,179,255,0.7); box-shadow: 0 0 clamp(2rem, 5vw, 5rem) rgba(0,179,255,0.42); }
+      .hero-art .core::after { content: "SBO"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--electric-30); font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.75rem); font-weight: 700; letter-spacing: 0.08em; }
+      .hero-art .node { position: absolute; width: clamp(0.45rem, 1vw, 0.8rem); aspect-ratio: 1; border-radius: 50%; background: var(--teal-80); box-shadow: 0 0 clamp(0.8rem, 2vw, 2rem) rgba(4,225,203,0.78); }
+      .hero-art .node.one { right: 16%; top: 23%; }
+      .hero-art .node.two { right: 34%; top: 21%; background: var(--cloud-80); }
+      .hero-art .node.three { right: 13%; top: 70%; background: var(--violet-65); }
+      .hero-art .node.four { right: 43%; top: 69%; background: var(--cloud-68); }
+      .hero-art .trace { position: absolute; width: clamp(10rem, 22vw, 24rem); height: clamp(5rem, 11vw, 10rem); right: 2%; top: 52%; border-top: 1px solid rgba(164,201,255,0.6); border-right: 1px solid rgba(164,201,255,0.6); transform: skewY(-18deg); }
+      .hero .hero-footer { position: absolute; bottom: clamp(0.8rem, 2.5vw, 2rem); left: var(--slide-padding); right: var(--slide-padding); display: flex; justify-content: space-between; color: rgba(255,255,255,0.62); font-size: var(--small-size); }
+
+      /* ===========================================
+         SLIDE 2: MISSION CARDS
+         =========================================== */
+      .mission-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.65rem, 1.4vw, 1.35rem); margin-top: clamp(1.2rem, 3vh, 2.2rem); }
+      .mission-card { min-height: clamp(11rem, 29vh, 18rem); padding: clamp(0.8rem, 1.7vw, 1.5rem); display: flex; flex-direction: column; gap: var(--element-gap); }
+      .mission-card .card-index { color: var(--cloud-68); font-family: var(--font-display); font-size: clamp(1.4rem, 2.5vw, 2.5rem); font-weight: 700; }
+      .mission-card h3 { color: var(--electric-30); font-size: var(--h3-size); line-height: 1.04; }
+      .mission-card p { color: var(--muted); font-size: var(--body-size); }
+      .mission-card .rail { height: clamp(0.18rem, 0.3vw, 0.3rem); width: clamp(3rem, 10vw, 8rem); background: var(--cloud-68); margin-top: auto; }
+      .mission-card:nth-child(2) .rail { background: var(--electric-30); }
+      .mission-card:nth-child(3) .rail { background: var(--teal-80); }
+
+      /* ===========================================
+         SLIDE 3: SCORECARD
+         =========================================== */
+      .score-layout { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(0.7rem, 1.6vw, 1.5rem); margin-top: clamp(1.2rem, 3vh, 2.2rem); }
+      .score-card { padding: clamp(0.8rem, 1.8vw, 1.6rem); min-height: clamp(9rem, 22vh, 13rem); display: flex; flex-direction: column; justify-content: space-between; }
+      .score-card .score { color: var(--electric-30); font-family: var(--font-display); font-size: clamp(3rem, 7vw, 6.8rem); font-weight: 700; line-height: 0.82; }
+      .score-card .score small { color: var(--muted); font-family: var(--font-body); font-size: var(--small-size); font-weight: 700; letter-spacing: 0.08em; }
+      .score-card h3 { color: var(--kinetic-blue); font-size: var(--h3-size); }
+      .capability-strip { display: grid; grid-template-columns: repeat(9, 1fr); gap: clamp(0.25rem, 0.5vw, 0.45rem); margin-top: clamp(0.9rem, 2.5vh, 1.7rem); }
+      .capability { border-top: clamp(0.2rem, 0.35vw, 0.35rem) solid var(--electric-30); background: var(--surface-container); border-radius: clamp(0.35rem, 0.5vw, 0.6rem); padding: clamp(0.35rem, 0.7vw, 0.65rem); min-height: clamp(4.3rem, 10vh, 6.2rem); display: flex; flex-direction: column; justify-content: space-between; }
+      .capability:nth-child(7) { border-top-color: var(--teal-80); }
+      .capability span { color: var(--muted); font-size: var(--small-size); line-height: 1.1; }
+      .capability strong { color: var(--electric-30); font-family: var(--font-display); font-size: clamp(1.1rem, 2vw, 1.8rem); }
+
+      /* ===========================================
+         SLIDE 4: BARRIERS
+         =========================================== */
+      .barrier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.65rem, 1.4vw, 1.3rem); margin-top: clamp(1.2rem, 3vh, 2.2rem); }
+      .barrier-card { padding: clamp(0.85rem, 1.8vw, 1.7rem); min-height: clamp(13rem, 34vh, 22rem); display: flex; flex-direction: column; }
+      .barrier-card .barrier-label { display: flex; justify-content: space-between; align-items: center; gap: var(--element-gap); }
+      .barrier-card h3 { color: var(--electric-30); font-size: clamp(1.25rem, 2.3vw, 2rem); }
+      .severity { border-radius: 999px; padding: clamp(0.25rem, 0.5vw, 0.45rem) clamp(0.45rem, 0.8vw, 0.75rem); font-size: var(--small-size); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--surface-container-high); color: var(--electric-30); }
+      .barrier-card p { color: var(--muted); font-size: var(--body-size); margin-top: var(--content-gap); }
+      .barrier-card .barrier-foot { color: var(--electric-30); font-family: var(--font-display); font-size: var(--small-size); font-weight: 700; margin-top: auto; padding-top: var(--content-gap); }
+      .barrier-card.time { border-top: clamp(0.25rem, 0.5vw, 0.45rem) solid var(--cloud-68); }
+      .barrier-card.trust { border-top: clamp(0.25rem, 0.5vw, 0.45rem) solid var(--violet-65); }
+      .barrier-card.trust .severity { color: #694080; background: #faeefe; }
+      .barrier-flow { display: flex; align-items: center; justify-content: center; gap: clamp(0.3rem, 1vw, 1rem); margin-top: clamp(0.9rem, 2.2vh, 1.5rem); color: var(--electric-30); font-family: var(--font-display); font-size: var(--small-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+      .barrier-flow i { display: block; width: clamp(2rem, 8vw, 7rem); height: 1px; background: var(--cloud-68); }
+
+      /* ===========================================
+         SLIDE 5: UNIFIED PROFILE
+         =========================================== */
+      .profile-layout { display: grid; grid-template-columns: 1fr auto 1.15fr auto 1fr; align-items: center; gap: clamp(0.6rem, 1.5vw, 1.5rem); margin-top: clamp(0.8rem, 2vh, 1.4rem); }
+      .profile-side { display: flex; flex-direction: column; gap: clamp(0.4rem, 1vh, 0.75rem); }
+      .profile-side h3 { color: var(--kinetic-blue); font-size: var(--h3-size); }
+      .profile-side p { color: var(--muted); font-size: var(--small-size); margin-bottom: var(--element-gap); }
+      .system-chip { background: var(--white); border: 1px solid var(--outline); border-radius: clamp(0.45rem, 0.7vw, 0.7rem); color: var(--electric-15); font-size: var(--small-size); font-weight: 700; padding: clamp(0.45rem, 0.8vw, 0.7rem); text-align: center; }
+      .profile-core { position: relative; aspect-ratio: 1; max-width: clamp(12rem, 24vw, 23rem); width: 100%; margin: 0 auto; border-radius: 50%; background: var(--white); border: clamp(0.25rem, 0.55vw, 0.5rem) solid var(--electric-30); box-shadow: 0 0 clamp(1rem, 3vw, 3rem) rgba(2,42,192,0.18); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: clamp(1rem, 2vw, 2rem); }
+      .profile-core::before { content: ""; position: absolute; inset: clamp(0.45rem, 1vw, 0.9rem); border: 1px solid var(--cloud-68); border-radius: 50%; opacity: 0.7; }
+      .profile-core .core-kicker { color: var(--kinetic-blue); font-size: var(--small-size); font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; z-index: 1; }
+      .profile-core strong { color: var(--electric-15); font-family: var(--font-display); font-size: clamp(1.35rem, 3vw, 2.8rem); line-height: 0.94; max-width: 85%; z-index: 1; }
+      .profile-core span { color: var(--muted); font-size: var(--small-size); margin-top: var(--element-gap); z-index: 1; }
+      .profile-arrow { color: var(--cloud-68); font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2.7rem); text-align: center; }
+      .future .system-chip { border-color: var(--cloud-68); background: #f5fbff; }
+      .future h3 { color: var(--teal-80); }
+      .future p { color: var(--electric-15); }
+
+      /* ===========================================
+         SLIDE 6: PROGRESS CARDS
+         =========================================== */
+      .signal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(0.55rem, 1.25vw, 1.1rem); margin-top: clamp(1.2rem, 3vh, 2.2rem); }
+      .signal-card { padding: clamp(0.8rem, 1.5vw, 1.4rem); min-height: clamp(13rem, 33vh, 21rem); display: flex; flex-direction: column; }
+      .signal-card .signal { color: var(--electric-30); font-family: var(--font-display); font-size: clamp(2rem, 4.3vw, 4rem); font-weight: 700; line-height: 0.86; }
+      .signal-card h3 { color: var(--kinetic-blue); font-size: var(--h3-size); margin-top: var(--content-gap); line-height: 1.05; }
+      .signal-card p { color: var(--muted); font-size: var(--body-size); margin-top: var(--element-gap); }
+      .signal-card .signal-tag { color: var(--muted); font-size: var(--small-size); margin-top: auto; padding-top: var(--content-gap); }
+      .signal-card:nth-child(2) { border-top: clamp(0.25rem, 0.45vw, 0.4rem) solid var(--cloud-68); }
+      .signal-card:nth-child(3) { border-top: clamp(0.25rem, 0.45vw, 0.4rem) solid var(--violet-65); }
+      .signal-card:nth-child(4) { border-top: clamp(0.25rem, 0.45vw, 0.4rem) solid var(--teal-80); }
+
+      /* ===========================================
+         SLIDE 7: ARCHITECTURE LAYERS
+         =========================================== */
+      .architecture-wrap { margin-top: clamp(1rem, 2.4vh, 1.8rem); display: flex; flex-direction: column; gap: clamp(0.35rem, 0.8vh, 0.7rem); }
+      .arch-row { display: grid; grid-template-columns: clamp(9rem, 15vw, 14rem) 1fr; gap: clamp(0.45rem, 1vw, 0.9rem); align-items: stretch; }
+      .arch-label { display: flex; flex-direction: column; justify-content: center; background: var(--electric-15); color: var(--white); border-radius: clamp(0.45rem, 0.7vw, 0.7rem); padding: clamp(0.55rem, 1vw, 0.9rem); }
+      .arch-label strong { font-family: var(--font-display); font-size: var(--h3-size); line-height: 0.95; }
+      .arch-label span { color: var(--cloud-80); font-size: var(--small-size); margin-top: var(--element-gap); }
+      .arch-items { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(0.3rem, 0.7vw, 0.7rem); border: 1px solid var(--outline); background: rgba(255,255,255,0.64); border-radius: clamp(0.45rem, 0.7vw, 0.7rem); padding: clamp(0.45rem, 0.9vw, 0.8rem); }
+      .arch-item { background: var(--white); border: 1px solid var(--cloud-80); border-radius: clamp(0.3rem, 0.5vw, 0.5rem); color: var(--electric-15); font-size: var(--small-size); font-weight: 700; padding: clamp(0.4rem, 0.7vw, 0.65rem); }
+      .arch-row.context .arch-label { background: var(--electric-30); }
+      .arch-row.context .arch-item { border-color: var(--electric-30); background: #f7f9ff; }
+      .arch-row.backbone .arch-label { background: var(--kinetic-blue); }
+      .arch-row.backbone .arch-item { border-color: var(--cloud-68); }
+      .arch-row.action .arch-label { background: #087f67; }
+      .arch-row.action .arch-label span { color: #bff8ed; }
+      .arch-row.action .arch-item { border-color: var(--teal-80); }
+      .arch-note { display: flex; justify-content: center; align-items: center; color: var(--muted); font-size: var(--small-size); margin-top: var(--element-gap); }
+      .arch-note::before, .arch-note::after { content: ""; height: 1px; background: var(--cloud-68); flex: 1; margin: 0 clamp(0.4rem, 1vw, 1rem); }
+
+      /* ===========================================
+         SLIDE 8: RECOMMENDATION GRID
+         =========================================== */
+      .recommendation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.55rem, 1.2vw, 1rem); margin-top: clamp(1rem, 2.5vh, 1.7rem); }
+      .recommendation { position: relative; padding: clamp(0.7rem, 1.25vw, 1.15rem); min-height: clamp(8.8rem, 19vh, 12rem); display: flex; flex-direction: column; }
+      .recommendation .number { position: absolute; top: clamp(-0.8rem, -1.3vw, -1.1rem); left: clamp(0.7rem, 1.25vw, 1.15rem); width: clamp(1.7rem, 3vw, 2.7rem); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; background: var(--electric-50); color: var(--white); font-family: var(--font-display); font-size: clamp(0.9rem, 1.6vw, 1.4rem); font-weight: 700; border: clamp(0.15rem, 0.3vw, 0.25rem) solid var(--surface); }
+      .recommendation h3 { color: var(--electric-30); font-size: var(--h3-size); margin-top: clamp(0.7rem, 1.3vw, 1.1rem); line-height: 1.02; }
+      .recommendation p { color: var(--muted); font-size: var(--small-size); margin-top: var(--element-gap); }
+      .recommendation:nth-child(2) .number, .recommendation:nth-child(5) .number { background: var(--kinetic-blue); }
+      .recommendation:nth-child(3) .number, .recommendation:nth-child(6) .number { background: #087f67; }
+
+      /* ===========================================
+         SLIDE 9: JOURNEY
+         =========================================== */
+      .journey-panel { margin-top: clamp(1rem, 2.5vh, 1.7rem); }
+      .journey-labels { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(0.3rem, 0.7vw, 0.7rem); color: var(--kinetic-blue); font-family: var(--font-display); font-size: var(--small-size); font-weight: 700; letter-spacing: 0.03em; text-align: center; }
+      .journey-line { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(0.3rem, 0.7vw, 0.7rem); margin-top: clamp(0.5rem, 1.2vh, 0.9rem); }
+      .journey-line::before { content: ""; position: absolute; top: 50%; left: 5%; right: 5%; height: 1px; background: var(--cloud-68); z-index: 0; }
+      .journey-node { position: relative; z-index: 1; display: flex; justify-content: center; }
+      .journey-node span { width: clamp(1.9rem, 3.4vw, 3rem); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; background: var(--white); border: clamp(0.2rem, 0.35vw, 0.35rem) solid var(--electric-50); color: var(--electric-30); font-family: var(--font-display); font-size: clamp(0.8rem, 1.3vw, 1.1rem); font-weight: 700; }
+      .journey-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(0.3rem, 0.7vw, 0.7rem); margin-top: clamp(0.65rem, 1.4vh, 1rem); }
+      .journey-card { padding: clamp(0.5rem, 0.9vw, 0.85rem); min-height: clamp(7rem, 16vh, 10rem); background: var(--white); border: 1px solid var(--outline); border-radius: clamp(0.4rem, 0.65vw, 0.65rem); }
+      .journey-card strong { display: block; color: var(--electric-15); font-family: var(--font-display); font-size: var(--small-size); line-height: 1.05; }
+      .journey-card p { color: var(--muted); font-size: var(--small-size); margin-top: var(--element-gap); }
+      .journey-lanes { display: grid; grid-template-columns: 0.8fr 1fr 1fr; gap: clamp(0.4rem, 1vw, 0.8rem); margin-top: clamp(0.9rem, 2vh, 1.4rem); }
+      .lane { border-radius: clamp(0.4rem, 0.65vw, 0.65rem); padding: clamp(0.5rem, 0.9vw, 0.8rem); font-size: var(--small-size); }
+      .lane.owner { background: #eaf5fe; color: var(--electric-30); }
+      .lane.profile { background: #f6efff; color: #694080; }
+      .lane.employee { background: #e7fbf9; color: #087f67; }
+      .lane strong { display: block; font-family: var(--font-display); margin-bottom: var(--element-gap); }
+
+      /* ===========================================
+         SLIDE 10: ROADMAP
+         =========================================== */
+      .roadmap { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.7rem, 1.4vw, 1.3rem); margin-top: clamp(1rem, 2.5vh, 1.7rem); }
+      .roadmap::before { content: ""; position: absolute; top: clamp(1.1rem, 2.6vw, 2.1rem); left: 8%; right: 8%; height: clamp(0.15rem, 0.25vw, 0.25rem); background: linear-gradient(90deg, var(--cloud-68), var(--electric-30), var(--teal-80)); z-index: 0; }
+      .phase { position: relative; z-index: 1; padding: clamp(0.8rem, 1.5vw, 1.3rem); padding-top: clamp(2.6rem, 5vw, 4.2rem); min-height: clamp(15rem, 37vh, 23rem); }
+      .phase-dot { position: absolute; top: 0; left: clamp(0.8rem, 1.5vw, 1.3rem); width: clamp(2rem, 3.8vw, 3.3rem); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: var(--electric-50); border: clamp(0.25rem, 0.45vw, 0.4rem) solid var(--surface); color: var(--white); font-family: var(--font-display); font-size: clamp(0.9rem, 1.7vw, 1.4rem); font-weight: 700; }
+      .phase.walk .phase-dot { background: var(--electric-30); }
+      .phase.run .phase-dot { background: #087f67; }
+      .phase h3 { color: var(--electric-30); font-size: var(--h3-size); }
+      .phase .phase-theme { color: var(--kinetic-blue); font-size: var(--small-size); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-top: var(--element-gap); }
+      .phase ul { list-style: none; display: flex; flex-direction: column; gap: clamp(0.35rem, 0.8vh, 0.65rem); margin-top: var(--content-gap); }
+      .phase li { color: var(--muted); font-size: var(--small-size); line-height: 1.25; padding-left: clamp(0.7rem, 1vw, 0.95rem); position: relative; }
+      .phase li::before { content: ""; position: absolute; left: 0; top: 0.45em; width: clamp(0.25rem, 0.45vw, 0.4rem); aspect-ratio: 1; border-radius: 50%; background: var(--cloud-68); }
+      .phase.walk li::before { background: var(--electric-30); }
+      .phase.run li::before { background: var(--teal-80); }
+      .draft-banner { margin-top: clamp(0.9rem, 2vh, 1.4rem); color: var(--muted); font-size: var(--small-size); text-align: center; }
+
+      /* ===========================================
+         SLIDE 11: CLOSE
+         =========================================== */
+      .close .slide-content { background: var(--kinetic-navy); max-width: none; justify-content: center; }
+      .close h2 { color: var(--white); font-size: var(--title-size); line-height: 0.92; max-width: clamp(25rem, 63vw, 65rem); }
+      .close .close-lead { color: var(--cloud-80); font-size: clamp(1rem, 1.8vw, 1.5rem); max-width: clamp(26rem, 56vw, 55rem); margin-top: var(--content-gap); }
+      .decision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.55rem, 1.2vw, 1rem); margin-top: clamp(1.3rem, 3vh, 2.2rem); max-width: clamp(40rem, 76vw, 75rem); }
+      .decision { border-top: clamp(0.2rem, 0.4vw, 0.35rem) solid var(--cloud-68); padding: clamp(0.65rem, 1.25vw, 1.1rem) 0 0; }
+      .decision:nth-child(2) { border-top-color: var(--violet-65); }
+      .decision:nth-child(3) { border-top-color: var(--teal-80); }
+      .decision strong { display: block; color: var(--white); font-family: var(--font-display); font-size: var(--h3-size); line-height: 1; }
+      .decision p { color: rgba(255,255,255,0.7); font-size: var(--small-size); margin-top: var(--element-gap); }
+      .next-step { display: inline-flex; align-items: center; gap: var(--element-gap); margin-top: clamp(1.4rem, 4vh, 3rem); color: var(--white); font-family: var(--font-display); font-size: var(--body-size); font-weight: 700; }
+      .next-step::before { content: ""; display: block; width: clamp(2.5rem, 8vw, 7rem); height: clamp(0.2rem, 0.35vw, 0.35rem); background: var(--teal-80); }
+      .close .source-note { color: rgba(255,255,255,0.55); }
+
+      /* ===========================================
+         CONTROLLER UI
+         =========================================== */
+      .progress-bar { position: fixed; top: 0; left: 0; width: 0; height: clamp(0.2rem, 0.35vw, 0.35rem); background: var(--teal-80); z-index: 1000; transition: width 0.25s ease; }
+      .nav-dots { position: fixed; top: 50%; right: clamp(0.55rem, 1.4vw, 1.4rem); transform: translateY(-50%); display: flex; flex-direction: column; gap: clamp(0.3rem, 0.7vh, 0.6rem); z-index: 1000; }
+      .nav-dot { width: clamp(0.35rem, 0.65vw, 0.6rem); height: clamp(0.35rem, 0.65vw, 0.6rem); border: 1px solid var(--electric-30); border-radius: 50%; background: transparent; cursor: pointer; padding: 0; transition: transform 0.2s ease, background 0.2s ease; }
+      .nav-dot.active { background: var(--electric-30); transform: scale(1.35); }
+      .dark ~ .nav-dots .nav-dot { border-color: var(--cloud-80); }
+      .keyboard-hint { position: fixed; bottom: clamp(0.6rem, 1.5vw, 1.2rem); right: clamp(0.8rem, 2.5vw, 2.5rem); color: var(--muted); font-size: var(--small-size); z-index: 20; opacity: 0.7; }
+      @media (max-width: 600px) { .mission-grid, .barrier-grid, .signal-grid, .score-layout, .recommendation-grid, .decision-grid { grid-template-columns: 1fr; } .profile-layout { grid-template-columns: 1fr; } .profile-arrow { transform: rotate(90deg); } .profile-core { max-width: clamp(10rem, 45vw, 16rem); } .capability-strip { grid-template-columns: repeat(5, 1fr); } .arch-row { grid-template-columns: 1fr; } .journey-labels, .journey-line, .journey-cards { grid-template-columns: 1fr; } .journey-line::before { top: 5%; bottom: 5%; left: 50%; right: auto; width: 1px; height: auto; } .journey-card { min-height: clamp(4.5rem, 10vh, 6rem); } .journey-node { min-height: clamp(2.4rem, 6vh, 3rem); } .journey-lanes { grid-template-columns: 1fr; } .roadmap { grid-template-columns: 1fr; } .roadmap::before { top: 4%; bottom: 4%; left: clamp(1.7rem, 4vw, 2.7rem); right: auto; width: clamp(0.15rem, 0.25vw, 0.25rem); height: auto; background: linear-gradient(180deg, var(--cloud-68), var(--electric-30), var(--teal-80)); } .phase { min-height: clamp(10rem, 21vh, 14rem); padding-left: clamp(3.5rem, 8vw, 5rem); padding-top: clamp(0.8rem, 1.5vw, 1.3rem); } .phase-dot { left: 0; } }
+    </style>
+  </head>
+  <body>
+    <div class="progress-bar" aria-hidden="true"></div>
+    <nav class="nav-dots" aria-label="Slide navigation"></nav>
+    <div class="keyboard-hint" aria-hidden="true">Use ← → or swipe</div>
+
+    <!-- Slide 1: title-hero -->
+    <section id="slide-1" class="slide dark hero visible" data-archetype="title-hero" aria-label="OneSBA data foundation">
+      <div class="hero-art decorative" aria-hidden="true">
+        <div class="orbit"></div>
+        <div class="core"></div>
+        <div class="trace"></div>
+        <div class="node one"></div><div class="node two"></div><div class="node three"></div><div class="node four"></div>
+      </div>
+      <div class="topline">
+        <span class="wordmark">DRA // Salesforce Global Public Sector</span>
+        <span class="page-number">01 / 11</span>
+      </div>
+      <div class="slide-content">
+        <div class="hero-copy">
+          <p class="eyebrow hero-kicker reveal">Small Business Administration</p>
+          <h1 class="reveal">OneSBA data foundation</h1>
+          <p class="hero-subtitle reveal">Executive data readiness readout</p>
+          <p class="date reveal">August 2026 · test render</p>
+        </div>
+      </div>
+      <div class="hero-footer"><span>Mission · context · action</span><span>Self-contained HTML / local staging</span></div>
+    </section>
+
+    <!-- Slide 2: mission-cards -->
+    <section id="slide-2" class="slide blue" data-archetype="mission-cards" aria-label="The executive message">
+      <div class="topline"><span class="wordmark">SBA / executive message</span><span class="page-number">02 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">Why now</p>
+        <h2 class="section-title reveal">The mission is ready for a stronger data spine.</h2>
+        <p class="section-subtitle reveal">SBA has rich program data. The constraint is how reliably it can be connected, trusted, and put into action.</p>
+        <div class="mission-grid">
+          <article class="card-shell mission-card reveal accent-rail">
+            <span class="card-index">01</span><h3>Mission pressure</h3><p>A 67% FY2027 discretionary budget reduction increases the need to automate without weakening controls.</p><span class="rail"></span>
+          </article>
+          <article class="card-shell mission-card reveal accent-rail">
+            <span class="card-index">02</span><h3>Operating reality</h3><p>Program systems hold partial views, so staff recover context through manual search, letters, workbooks, and batch cycles.</p><span class="rail"></span>
+          </article>
+          <article class="card-shell mission-card reveal accent-rail teal">
+            <span class="card-index">03</span><h3>Recommended sequence</h3><p>Unlock the foundation first, strengthen Trust in parallel, and Activate only where evidence and guardrails support it.</p><span class="rail"></span>
+          </article>
+        </div>
+        <p class="source-note">Assessment sources: Strategic Alignment · Data Barriers · Data Value Chain</p>
+      </div>
+    </section>
+
+    <!-- Slide 3: evidence-scorecard -->
+    <section id="slide-3" class="slide light" data-archetype="evidence-scorecard" aria-label="DRA synthesis and scores">
+      <div class="topline"><span class="wordmark">SBA / evidence base</span><span class="page-number">03 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">DRA synthesis</p>
+        <h2 class="section-title reveal">The signal is consistent across programs.</h2>
+        <p class="section-subtitle reveal">Five interview inputs and two research inputs point to a crawl-first foundation pattern with analytical capability in pockets.</p>
+        <div class="score-layout">
+          <article class="card-shell score-card reveal accent-rail"><span class="score">33<small> / 100</small></span><h3>Integration Health</h3><p>Connect, Integrate, and Understand each score 1.</p></article>
+          <article class="card-shell score-card reveal accent-rail teal"><span class="score">37<small> / 100</small></span><h3>AI Readiness</h3><p>Most Trust and Activate capabilities remain at foundation stage.</p></article>
+        </div>
+        <div class="capability-strip reveal" aria-label="Capability score strip">
+          <div class="capability"><span>Connect</span><strong>1</strong></div><div class="capability"><span>Integrate</span><strong>1</strong></div><div class="capability"><span>Understand</span><strong>1</strong></div><div class="capability"><span>Unify</span><strong>1</strong></div><div class="capability"><span>Validate</span><strong>1</strong></div><div class="capability"><span>Protect</span><strong>1</strong></div><div class="capability"><span>Decide</span><strong>2</strong></div><div class="capability"><span>Orchestrate</span><strong>1</strong></div><div class="capability"><span>Act</span><strong>1</strong></div>
+        </div>
+        <p class="source-note">Directional synthesis; validate with sponsor and system owners before external delivery.</p>
+      </div>
+    </section>
+
+    <!-- Slide 4: evidence-scorecard -->
+    <section id="slide-4" class="slide blue" data-archetype="evidence-scorecard" aria-label="Three barriers">
+      <div class="topline"><span class="wordmark">SBA / three barriers</span><span class="page-number">04 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">DRA diagnosis</p>
+        <h2 class="section-title reveal">Three barriers block the mission.</h2>
+        <p class="section-subtitle reveal">The barriers reinforce each other: missing context creates manual work, and uncertain context limits automation.</p>
+        <div class="barrier-grid">
+          <article class="card-shell barrier-card reveal accent-rail"><div class="barrier-label"><h3>Blind Spot</h3><span class="severity">High</span></div><p>Program systems hold partial views that cannot be connected reliably across borrowers, businesses, owners, and programs.</p><span class="barrier-foot">Data exists · context is fragmented</span></article>
+          <article class="card-shell barrier-card time reveal accent-rail"><div class="barrier-label"><h3>Time Trap</h3><span class="severity">High</span></div><p>Staff recover context through spreadsheets, letters, manual searches, and recurring batch cycles.</p><span class="barrier-foot">Data is found · too late or too manually</span></article>
+          <article class="card-shell barrier-card trust reveal accent-rail violet"><div class="barrier-label"><h3>Trust Gap</h3><span class="severity">Medium</span></div><p>Source authority, identity matching, documentation, and control effectiveness still require human judgment.</p><span class="barrier-foot">Data is available · confidence is uneven</span></article>
+        </div>
+        <div class="barrier-flow reveal"><span>Blind Spot</span><i></i><span>Time Trap</span><i></i><span>Trust Gap</span></div>
+        <p class="source-note">Assessment sources: Data Barriers · Appendix</p>
+      </div>
+    </section>
+
+    <!-- Slide 5: unified-profile -->
+    <section id="slide-5" class="slide light" data-archetype="unified-profile" aria-label="Unified small business owner profile">
+      <div class="topline"><span class="wordmark">SBA / identity and context</span><span class="page-number">05 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">Highest-leverage gap</p>
+        <h2 class="section-title reveal">Make the small-business-owner profile the connective tissue.</h2>
+        <p class="section-subtitle reveal">Preserve each system of record while giving staff, analytics, and workflows a governed view of the relationship.</p>
+        <div class="profile-layout">
+          <div class="profile-side reveal"><h3>Fragmented sources</h3><p>Partial program context and multiple identifiers.</p><span class="system-chip">7A / E-Tran</span><span class="system-chip">Disaster / ULP</span><span class="system-chip">SBIC / GPTS</span><span class="system-chip">UCP / certifications</span></div>
+          <div class="profile-arrow reveal" aria-hidden="true">→</div>
+          <div class="profile-core reveal"><span class="core-kicker">Governed context</span><strong>Unified SBO profile</strong><span>Identity · authority · consent · history</span></div>
+          <div class="profile-arrow reveal" aria-hidden="true">→</div>
+          <div class="profile-side future reveal"><h3>Decisions and service</h3><p>Use trusted context at the point of action.</p><span class="system-chip">Exposure and fraud signals</span><span class="system-chip">Certification review</span><span class="system-chip">Contact center context</span><span class="system-chip">Proactive outreach</span></div>
+        </div>
+        <p class="source-note">Assessment sources: Data Barriers · Personas · Data Value Chain</p>
+      </div>
+    </section>
+
+    <!-- Slide 6: progress-cards -->
+    <section id="slide-6" class="slide blue" data-archetype="progress-cards" aria-label="Manual operational burden">
+      <div class="topline"><span class="wordmark">SBA / operating signals</span><span class="page-number">06 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">Current-state cost</p>
+        <h2 class="section-title reveal">Manual loops consume capacity that should go to mission work.</h2>
+        <p class="section-subtitle reveal">These are assessment-reported workload and latency signals—not a calculated ROI claim.</p>
+        <div class="signal-grid">
+          <article class="card-shell signal-card reveal"><span class="signal">40–75</span><h3>Verification letters per week</h3><p>National Ombudsman sends manual requests to verify EIDL loan charge-offs.</p><span class="signal-tag">Reported in interview synthesis</span></article>
+          <article class="card-shell signal-card reveal"><span class="signal">30–40</span><h3>Letters signed per day</h3><p>Leadership capacity is absorbed by manual correspondence and process management.</p><span class="signal-tag">Reported in interview synthesis</span></article>
+          <article class="card-shell signal-card reveal"><span class="signal">3,600–3,800</span><h3>Firms in annual review</h3><p>Workbook entry and RPA consolidation support a large recurring portfolio process.</p><span class="signal-tag">Reported in interview synthesis</span></article>
+          <article class="card-shell signal-card reveal"><span class="signal">Monthly</span><h3>1502 reporting cycle</h3><p>Manual lender uploads create a recurring batch and data-freshness problem.</p><span class="signal-tag">Reported in interview synthesis</span></article>
+        </div>
+        <p class="source-note">Assessment sources: Data Barriers · Personas · Data Value Chain</p>
+      </div>
+    </section>
+
+    <!-- Slide 7: architecture-layers -->
+    <section id="slide-7" class="slide light" data-archetype="architecture-layers" aria-label="Target state direction to validate">
+      <div class="topline"><span class="wordmark">SBA / architecture direction</span><span class="page-number">07 / 11</span></div>
+      <div class="slide-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--element-gap);"><div><p class="eyebrow reveal">Target-state direction</p><h2 class="section-title reveal">A layered foundation connects action to authoritative sources.</h2></div><span class="pill cyan reveal">Direction to validate</span></div>
+        <p class="section-subtitle reveal">The target-state page is still draft. This is a conversation starter grounded in current-state evidence and the OneSBA ambition.</p>
+        <div class="architecture-wrap">
+          <div class="arch-row action reveal"><div class="arch-label"><strong>System of action</strong><span>Where work moves</span></div><div class="arch-items"><span class="arch-item">Staff and field</span><span class="arch-item">Contact center</span><span class="arch-item">Agents</span><span class="arch-item">Certification</span><span class="arch-item">Lending</span><span class="arch-item">Disaster response</span></div></div>
+          <div class="arch-row context reveal"><div class="arch-label"><strong>Unified context</strong><span>What work knows</span></div><div class="arch-items"><span class="arch-item">SBO identity</span><span class="arch-item">Source authority</span><span class="arch-item">Consent</span><span class="arch-item">Quality</span><span class="arch-item">Policy signals</span></div></div>
+          <div class="arch-row backbone reveal"><div class="arch-label"><strong>Integration backbone</strong><span>How data moves</span></div><div class="arch-items"><span class="arch-item">MuleSoft Government Cloud</span><span class="arch-item">Reusable APIs</span><span class="arch-item">Events</span><span class="arch-item">Governed external access</span></div></div>
+          <div class="arch-row reveal"><div class="arch-label"><strong>Domain sources</strong><span>Where data lives</span></div><div class="arch-items"><span class="arch-item">UCP</span><span class="arch-item">CAFS / ULP</span><span class="arch-item">E-Tran / PIM / GPTS</span><span class="arch-item">iCAP / NOCMS</span><span class="arch-item">Permitted federal sources</span></div></div>
+        </div>
+        <div class="arch-note reveal">Extend what exists before replacing what works</div>
+        <p class="source-note">Assessment sources: Strategic Alignment · Data Value Chain · Current State Architecture · Target State Architecture</p>
+      </div>
+    </section>
+
+    <!-- Slide 8: recommendation-grid -->
+    <section id="slide-8" class="slide blue" data-archetype="recommendation-grid" aria-label="Foundation moves to validate">
+      <div class="topline"><span class="wordmark">SBA / recommendations</span><span class="page-number">08 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">Decision menu</p>
+        <h2 class="section-title reveal">Six foundation moves to validate.</h2>
+        <p class="section-subtitle reveal">Each move connects a documented barrier to an outcome. These are proposed validation topics, not approved commitments.</p>
+        <div class="recommendation-grid">
+          <article class="card-shell recommendation reveal"><span class="number">1</span><h3>API-led backbone</h3><p>Extend managed integration across the highest-value manual workflows.</p></article>
+          <article class="card-shell recommendation reveal"><span class="number">2</span><h3>Unified SBO identity</h3><p>Resolve person, business, owner, UEI, EIN, and program identifiers.</p></article>
+          <article class="card-shell recommendation reveal"><span class="number">3</span><h3>Governed source authority</h3><p>Define which source is trusted for each decision and workflow.</p></article>
+          <article class="card-shell recommendation reveal"><span class="number">4</span><h3>Operational / analytical split</h3><p>Align fast operational context with deeper historical analysis.</p></article>
+          <article class="card-shell recommendation reveal"><span class="number">5</span><h3>Cross-program risk signals</h3><p>Connect lending, investment, certification, and disaster context.</p></article>
+          <article class="card-shell recommendation reveal"><span class="number">6</span><h3>Workflow activation</h3><p>Move validated insight into staff, outreach, and agent workflows.</p></article>
+        </div>
+        <p class="source-note">Assessment sources: Data Barriers · Data Value Chain · Current State Architecture</p>
+      </div>
+    </section>
+
+    <!-- Slide 9: journey -->
+    <section id="slide-9" class="slide light" data-archetype="journey" aria-label="Illustrative unified profile journey">
+      <div class="topline"><span class="wordmark">SBA / target-state experience</span><span class="page-number">09 / 11</span></div>
+      <div class="slide-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--element-gap);"><div><p class="eyebrow reveal">Illustrative target state</p><h2 class="section-title reveal">The profile changes the journey, not just the data model.</h2></div><span class="pill cyan reveal">Not current capability</span></div>
+        <p class="section-subtitle reveal">A future experience can remove repetition when identity, context, consent, and workflow are designed together.</p>
+        <div class="journey-panel">
+          <div class="journey-labels reveal"><span>Relevant outreach</span><span>Preferred channel</span><span>Profile context</span><span>Guided handoff</span><span>Next action</span></div>
+          <div class="journey-line reveal"><div class="journey-node"><span>1</span></div><div class="journey-node"><span>2</span></div><div class="journey-node"><span>3</span></div><div class="journey-node"><span>4</span></div><div class="journey-node"><span>5</span></div></div>
+          <div class="journey-cards reveal"><div class="journey-card"><strong>Eligibility signal</strong><p>Permitted program context identifies a relevant message.</p></div><div class="journey-card"><strong>Two-way response</strong><p>The owner responds without starting over.</p></div><div class="journey-card"><strong>Shared context</strong><p>Employee sees the relevant history and authority.</p></div><div class="journey-card"><strong>Program routing</strong><p>Workflow preserves context across handoffs.</p></div><div class="journey-card"><strong>Controlled action</strong><p>Consent and policy boundaries remain explicit.</p></div></div>
+        </div>
+        <div class="journey-lanes reveal"><div class="lane owner"><strong>Owner</strong>Receives help that reflects their relationship with SBA.</div><div class="lane profile"><strong>Unified profile</strong>Connects identifiers, systems of record, authority, and consent.</div><div class="lane employee"><strong>Employee</strong>Acts with context instead of searching across program silos.</div></div>
+        <p class="source-note">Assessment source: Personas · Current State Architecture</p>
+      </div>
+    </section>
+
+    <!-- Slide 10: roadmap-timeline -->
+    <section id="slide-10" class="slide blue" data-archetype="roadmap-timeline" aria-label="Draft Crawl Walk Run sequence">
+      <div class="topline"><span class="wordmark">SBA / sequence</span><span class="page-number">10 / 11</span></div>
+      <div class="slide-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--element-gap);"><div><p class="eyebrow reveal">Draft roadmap</p><h2 class="section-title reveal">Unlock first. Trust in parallel. Activate with proof.</h2></div><span class="pill cyan reveal">Draft sequence</span></div>
+        <p class="section-subtitle reveal">The final timing, owners, dependencies, and success measures require sponsor and system-owner confirmation.</p>
+        <div class="roadmap">
+          <article class="card-shell phase reveal"><span class="phase-dot">1</span><h3>Crawl</h3><span class="phase-theme">Unlock the foundation</span><ul><li>Choose one high-value manual loop.</li><li>Define identity and source boundaries.</li><li>Extend API coverage from the existing integration foundation.</li></ul></article>
+          <article class="card-shell phase walk reveal"><span class="phase-dot">2</span><h3>Walk</h3><span class="phase-theme">Strengthen Trust</span><ul><li>Add matching, quality, lineage, consent, and IAM controls.</li><li>Make documentation requirements enforceable.</li><li>Validate cross-program context with owners.</li></ul></article>
+          <article class="card-shell phase run reveal"><span class="phase-dot">3</span><h3>Run</h3><span class="phase-theme">Activate responsibly</span><ul><li>Expand proactive outreach and risk signals.</li><li>Embed decisions in staff and contact-center workflows.</li><li>Scale agents where guardrails are proven.</li></ul></article>
+        </div>
+        <p class="draft-banner reveal">Trust is a parallel design responsibility—not a gate postponed until after every integration.</p>
+        <p class="source-note">Assessment sources: Data Value Chain · Roadmap</p>
+      </div>
+    </section>
+
+    <!-- Slide 11: closing -->
+    <section id="slide-11" class="slide dark close" data-archetype="section-divider" aria-label="Decisions before the final blueprint">
+      <div class="topline"><span class="wordmark">SBA / next decisions</span><span class="page-number">11 / 11</span></div>
+      <div class="slide-content">
+        <p class="eyebrow reveal">From evidence to ownership</p>
+        <h2 class="reveal">Validate the foundation before scaling the promise.</h2>
+        <p class="close-lead reveal">The next milestone is not another abstract vision. It is a sponsor-owned set of decisions that turns the direction into a defensible blueprint.</p>
+        <div class="decision-grid">
+          <article class="decision reveal"><strong>Choose the first workflow</strong><p>Identify the system owners who can validate identity, integration, and control requirements.</p></article>
+          <article class="decision reveal"><strong>Set the architecture boundary</strong><p>Clarify the roles of Salesforce/Data Cloud, MuleSoft, analytical platforms, and program systems of record.</p></article>
+          <article class="decision reveal"><strong>Sequence the window</strong><p>Account for consent, compliance, capacity, and the October 2027 IRS MoU renewal constraint.</p></article>
+        </div>
+        <div class="next-step reveal">Next: complete the target-state architecture and sponsor-approved Crawl / Walk / Run plan.</div>
+        <p class="source-note reveal">Assessment sources: Strategic Alignment · Target State Architecture · Roadmap</p>
+      </div>
+    </section>
+
+    <script>
+      /* ===========================================
+         SLIDE PRESENTATION CONTROLLER
+         Keyboard, wheel, touch, progress, and dots.
+         =========================================== */
+      class SlidePresentation {
+        constructor() {
+          this.slides = Array.from(document.querySelectorAll('.slide'));
+          this.progressBar = document.querySelector('.progress-bar');
+          this.navDotsContainer = document.querySelector('.nav-dots');
+          this.currentSlide = 0;
+          this.touchStartY = null;
+          this.slides[0]?.classList.add('visible');
+          this.scrollTicking = false;
+          this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          this.setupIntersectionObserver();
+          this.setupKeyboardNav();
+          this.setupTouchNav();
+          this.setupWheelNav();
+          this.setupProgressBar();
+          this.setupNavDots();
+          this.updateProgress(0);
+        }
+
+        setupIntersectionObserver() {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                this.currentSlide = this.slides.indexOf(entry.target);
+                this.updateProgress(this.currentSlide);
+                this.updateActiveDot(this.currentSlide);
+              }
+            });
+          }, { threshold: 0.55 });
+          this.slides.forEach((slide) => observer.observe(slide));
+        }
+
+        setupKeyboardNav() {
+          document.addEventListener('keydown', (event) => {
+            if (event.target.matches('input, textarea, [contenteditable="true"]')) return;
+            if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) {
+              event.preventDefault();
+              this.goTo(this.currentSlide + 1);
+            }
+            if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) {
+              event.preventDefault();
+              this.goTo(this.currentSlide - 1);
+            }
+            if (event.key === 'Home') this.goTo(0);
+            if (event.key === 'End') this.goTo(this.slides.length - 1);
+          });
+        }
+
+        setupTouchNav() {
+          document.addEventListener('touchstart', (event) => {
+            this.touchStartY = event.changedTouches[0].screenY;
+          }, { passive: true });
+          document.addEventListener('touchend', (event) => {
+            if (this.touchStartY === null) return;
+            const delta = this.touchStartY - event.changedTouches[0].screenY;
+            if (Math.abs(delta) > 35) this.goTo(this.currentSlide + (delta > 0 ? 1 : -1));
+            this.touchStartY = null;
+          }, { passive: true });
+        }
+
+        setupWheelNav() {
+          let wheelLock = false;
+          document.addEventListener('wheel', (event) => {
+            if (wheelLock || Math.abs(event.deltaY) < 10) return;
+            wheelLock = true;
+            this.goTo(this.currentSlide + (event.deltaY > 0 ? 1 : -1));
+            window.setTimeout(() => { wheelLock = false; }, 650);
+          }, { passive: true });
+        }
+
+        setupProgressBar() {
+          window.addEventListener('scroll', () => {
+            if (this.scrollTicking) return;
+            window.requestAnimationFrame(() => {
+              const index = Math.round(window.scrollY / Math.max(window.innerHeight, 1));
+              this.currentSlide = Math.max(0, Math.min(this.slides.length - 1, index));
+              this.updateProgress(this.currentSlide);
+              this.updateActiveDot(this.currentSlide);
+              this.scrollTicking = false;
+            });
+            this.scrollTicking = true;
+          }, { passive: true });
+        }
+
+        setupNavDots() {
+          this.navDotsContainer.innerHTML = '';
+          this.slides.forEach((slide, index) => {
+            const button = document.createElement('button');
+            button.className = 'nav-dot';
+            button.type = 'button';
+            button.setAttribute('aria-label', `Go to slide ${index + 1}`);
+            button.addEventListener('click', () => this.goTo(index));
+            this.navDotsContainer.appendChild(button);
+          });
+        }
+
+        updateActiveDot(index) {
+          Array.from(this.navDotsContainer.children).forEach((dot, dotIndex) => {
+            dot.classList.toggle('active', dotIndex === index);
+          });
+        }
+
+        updateProgress(index) {
+          const ratio = this.slides.length > 1 ? index / (this.slides.length - 1) : 0;
+          this.progressBar.style.width = `${ratio * 100}%`;
+        }
+
+        goTo(index) {
+          const target = Math.max(0, Math.min(this.slides.length - 1, index));
+          this.currentSlide = target;
+          this.slides[target].scrollIntoView({ behavior: this.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+          this.updateProgress(target);
+          this.updateActiveDot(target);
+        }
+      }
+
+      new SlidePresentation();
+    </script>
+  </body>
+</html>
