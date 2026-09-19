@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ODU × Salesforce — Data Readiness Assessment</title>
+<!-- EMU-safe: NO external font CDN. Licensed Salesforce brand fonts served locally from
+     ./fonts/ via @font-face (internal Salesforce use only — see ./fonts/NOTICE).
+     System-stack fallback retained for safety. See references/salesforce-brand.md. -->
+<style>
+  /* ===========================================
+     BRAND FONTS — local @font-face, no network fetch
+     Licensed Salesforce fonts, internal use only.
+     =========================================== */
+  @font-face{font-family:'ITC Avant Garde for Salesforce';
+    src:url('fonts/ITCAvantGardeStd-Demi.otf') format('opentype');
+    font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Salesforce Sans';
+    src:url('fonts/SalesforceSans-Light.ttf') format('truetype');
+    font-weight:300;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Salesforce Sans';
+    src:url('fonts/SalesforceSans-Book.ttf') format('truetype');
+    font-weight:350;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Salesforce Sans';
+    src:url('fonts/SalesforceSans-Regular.ttf') format('truetype');
+    font-weight:400;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Salesforce Sans';
+    src:url('fonts/SalesforceSans-Semibold.ttf') format('truetype');
+    font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Salesforce Sans';
+    src:url('fonts/SalesforceSans-Bold.ttf') format('truetype');
+    font-weight:700;font-style:normal;font-display:swap;}
+
+  /* ===========================================
+     THEME — DRAVantage Salesforce brand tokens
+     (references/salesforce-brand.md)
+     =========================================== */
+  :root {
+    /* Primary palette */
+    --white:#FFFFFF; --cloud-95:#EAF5FE; --cloud-80:#90D0FE; --cloud-68:#00B3FF;
+    --electric-50:#066AFE; --electric-30:#022AC0; --electric-15:#001E5B;
+    /* Secondary (<=20%) */
+    --teal-80:#04E1CB; --violet-65:#D17DFE;
+
+    /* Semantic */
+    --bg-primary:var(--cloud-95);
+    --text-primary:var(--electric-15);
+    --text-headline:var(--electric-30);
+    --accent-unlock:var(--cloud-68);
+    --accent-trust:var(--electric-30);
+    --accent-activate:var(--teal-80);
+    --accent-agentic:var(--violet-65);
+
+    /* Type — EMU-safe local/fallback stack, no CDN */
+    --font-display:'ITC Avant Garde for Salesforce','Helvetica Neue',Arial,sans-serif;
+    --font-body:'Salesforce Sans',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+
+    /* Approved gradients */
+    --grad-evening:linear-gradient(160deg,#001E5B 0%,#022AC0 38%,#066AFE 72%,#00B3FF 100%);
+    --grad-morning:linear-gradient(180deg,#90D0FE 0%,#EAF5FE 100%);
+
+    /* Motion */
+    --ease:cubic-bezier(0.16,1,0.3,1);
+    --dur:0.6s;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  /* ===== viewport-base.css (frontend-slides — included in full) ===== */
+  html,body{height:100%;overflow-x:hidden;}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth;}
+  .slide{width:100vw;height:100vh;height:100dvh;overflow:hidden;scroll-snap-align:start;
+    display:flex;flex-direction:column;position:relative;}
+  .slide-content{flex:1;display:flex;flex-direction:column;justify-content:center;
+    max-height:100%;overflow:hidden;padding:var(--slide-padding);}
+  :root{
+    --title-size:clamp(1.5rem,5vw,4rem);--h2-size:clamp(1.25rem,3.5vw,2.5rem);
+    --h3-size:clamp(1rem,2.5vw,1.75rem);--body-size:clamp(0.8rem,1.5vw,1.2rem);
+    --small-size:clamp(0.65rem,1vw,0.9rem);
+    --slide-padding:clamp(1.5rem,5vw,5.5rem);--content-gap:clamp(0.75rem,2vw,2rem);
+    --element-gap:clamp(0.35rem,1vw,1rem);
+  }
+  .card,.container,.content-box{max-width:min(92vw,1100px);max-height:min(82vh,720px);}
+  .feature-list,.bullet-list{gap:clamp(0.4rem,1vh,1rem);}
+  img,.image-container{max-width:100%;max-height:min(50vh,400px);object-fit:contain;}
+  @media (max-height:700px){:root{--slide-padding:clamp(1rem,3vw,2.5rem);
+    --title-size:clamp(1.25rem,4.5vw,2.6rem);--h2-size:clamp(1rem,3vw,1.8rem);}}
+  @media (max-height:600px){:root{--slide-padding:clamp(0.6rem,2.5vw,1.5rem);
+    --title-size:clamp(1.1rem,4vw,2rem);--body-size:clamp(0.72rem,1.2vw,0.95rem);}
+    .nav-dots,.decorative,.s-eyebrow{display:none;}}
+  @media (max-width:600px){:root{--title-size:clamp(1.25rem,7vw,2.5rem);}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{
+    animation-duration:0.01ms!important;transition-duration:0.2s!important;}
+    html{scroll-behavior:auto;}}
+
+  /* ===== Base look ===== */
+  body{background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-body);
+    line-height:1.5;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,.eyebrow,.s-eyebrow{font-family:var(--font-display);letter-spacing:-0.01em;}
+  h1{font-size:var(--title-size);color:var(--electric-15);line-height:1.0;font-weight:600;}
+  h2{font-size:var(--h2-size);color:var(--text-headline);line-height:1.08;font-weight:600;
+    margin-bottom:var(--content-gap);}
+  p{font-size:var(--body-size);max-width:60ch;}
+  .lede{font-size:clamp(1rem,2vw,1.4rem);color:var(--electric-15);max-width:48ch;}
+
+  /* eyebrow / kicker */
+  .s-eyebrow{font-size:var(--small-size);text-transform:none;font-weight:600;
+    color:var(--electric-50);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;}
+  .s-eyebrow::before{content:"";width:1.6rem;height:3px;border-radius:2px;background:currentColor;}
+
+  /* bullets */
+  ul.bullet-list{list-style:none;display:flex;flex-direction:column;margin-top:var(--content-gap);}
+  ul.bullet-list li{font-size:var(--body-size);padding-left:1.5rem;position:relative;
+    max-width:64ch;}
+  ul.bullet-list li::before{content:"";position:absolute;left:0;top:0.62em;width:0.55rem;
+    height:0.55rem;border-radius:50%;background:var(--accent);}
+  ul.bullet-list li strong{color:var(--electric-30);font-weight:700;}
+
+  /* header chrome */
+  .chrome{position:absolute;top:clamp(1rem,3vh,2rem);left:var(--slide-padding);
+    right:var(--slide-padding);display:flex;justify-content:space-between;align-items:center;
+    font-size:var(--small-size);color:var(--electric-50);font-family:var(--font-display);
+    font-weight:600;z-index:3;}
+  .chrome .dot{width:0.5rem;height:0.5rem;border-radius:50%;background:var(--cloud-68);
+    display:inline-block;margin-right:0.4rem;}
+
+  /* progress + nav */
+  .progress-bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:100;
+    background:var(--cloud-68);transition:width 0.2s ease;}
+  .nav-dots{position:fixed;right:clamp(0.8rem,2vw,1.6rem);top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;gap:0.6rem;z-index:50;}
+  .nav-dots button{width:0.7rem;height:0.7rem;border-radius:50%;border:none;padding:0;
+    background:var(--cloud-80);cursor:pointer;transition:all 0.25s ease;}
+  .nav-dots button.active{background:var(--electric-30);transform:scale(1.35);}
+
+  /* reveal animations */
+  .reveal{opacity:0;transform:translateY(28px);
+    transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);}
+  .slide.visible .reveal{opacity:1;transform:none;}
+  .slide.visible .reveal:nth-child(1){transition-delay:.08s;}
+  .slide.visible .reveal:nth-child(2){transition-delay:.18s;}
+  .slide.visible .reveal:nth-child(3){transition-delay:.28s;}
+  .slide.visible .reveal:nth-child(4){transition-delay:.38s;}
+  .slide.visible .reveal:nth-child(5){transition-delay:.48s;}
+
+  /* ===== Slide-type styling ===== */
+  /* Hero (dark, Evening gradient) */
+  .hero{background:var(--grad-evening);color:var(--white);}
+  .hero h1{color:var(--white);max-width:18ch;}
+  .hero .s-eyebrow{color:var(--cloud-80);}
+  .hero .meta{margin-top:var(--content-gap);font-size:var(--body-size);color:var(--cloud-80);
+    font-family:var(--font-display);font-weight:600;}
+  .hero .tag{margin-top:0.4rem;font-size:var(--small-size);color:var(--cloud-95);opacity:.85;
+    font-family:var(--font-body);}
+  .hero::after{content:"";position:absolute;inset:0;opacity:.18;pointer-events:none;
+    background:radial-gradient(60vw 60vw at 85% 15%,#00B3FF 0%,transparent 60%);}
+
+  /* accent bar that changes per section */
+  .slide[data-accent="unlock"]{--accent:var(--accent-unlock);}
+  .slide[data-accent="trust"]{--accent:var(--accent-trust);}
+  .slide[data-accent="activate"]{--accent:var(--accent-activate);}
+  .slide[data-accent="agentic"]{--accent:var(--accent-agentic);}
+  .slide[data-accent="base"]{--accent:var(--cloud-68);}
+  .s-eyebrow{color:var(--accent);}
+
+  /* tension slide */
+  .tension{background:var(--white);}
+  .tension .vs{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(0.8rem,2.5vw,2.5rem);
+    align-items:stretch;margin-top:var(--content-gap);max-width:min(94vw,1100px);}
+  .tension .vs .col{padding:clamp(1rem,2.5vw,1.8rem);border-radius:14px;}
+  .tension .vs .aspire{background:var(--cloud-95);border:1px solid var(--cloud-80);}
+  .tension .vs .reality{background:#FFF4F0;border:1px solid #FFD9C9;}
+  .tension .vs .arrow{display:flex;align-items:center;font-size:clamp(1.4rem,3vw,2.2rem);
+    color:var(--electric-30);font-family:var(--font-display);}
+  .vs h3{font-size:var(--h3-size);margin-bottom:0.5rem;font-family:var(--font-display);}
+  .vs .aspire h3{color:var(--electric-30);}
+  .vs .reality h3{color:#C2410C;}
+  .vs p{font-size:var(--small-size);}
+
+  /* three-block layer row (Unlock/Trust/Activate) */
+  .blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(0.7rem,2vw,1.4rem);
+    margin-top:var(--content-gap);max-width:min(94vw,1100px);}
+  @media (max-width:680px){.blocks{grid-template-columns:1fr;}}
+  .block{border-radius:14px;padding:clamp(0.9rem,2vw,1.5rem);background:var(--white);
+    border-top:5px solid var(--bk);box-shadow:0 6px 24px rgba(0,30,91,.06);}
+  .block[data-b="unlock"]{--bk:var(--cloud-68);}
+  .block[data-b="trust"]{--bk:var(--electric-30);}
+  .block[data-b="activate"]{--bk:var(--teal-80);}
+  .block .bname{font-family:var(--font-display);font-weight:600;font-size:var(--h3-size);
+    color:var(--electric-15);}
+  .block .bcaps{font-size:var(--small-size);color:var(--electric-50);margin-top:0.2rem;}
+  .block .btool{font-size:var(--small-size);color:var(--text-primary);margin-top:0.7rem;
+    line-height:1.45;}
+  .block .btool b{color:var(--electric-30);}
+
+  /* system chips */
+  .chips{display:flex;flex-wrap:wrap;gap:0.55rem;margin-top:var(--content-gap);
+    max-width:64ch;}
+  .chip{font-size:var(--small-size);background:var(--white);border:1px solid var(--cloud-80);
+    color:var(--electric-15);padding:0.45rem 0.85rem;border-radius:999px;font-weight:600;}
+  .chip.demand{background:var(--cloud-95);border-color:var(--cloud-68);color:var(--electric-30);}
+
+  /* flow (business first) */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-top:var(--content-gap);}
+  .flow .step{background:var(--white);border:1px solid var(--cloud-80);border-radius:10px;
+    padding:0.55rem 0.9rem;font-family:var(--font-display);font-weight:600;
+    font-size:var(--small-size);color:var(--electric-15);}
+  .flow .sep{color:var(--electric-50);font-size:1.1rem;}
+
+  /* big quote / use case */
+  .usecase{background:var(--grad-morning);}
+  .usecase .q{font-family:var(--font-display);font-weight:600;color:var(--electric-15);
+    font-size:clamp(1.5rem,4vw,3rem);line-height:1.05;max-width:18ch;}
+  .usecase .q .hl{color:var(--cloud-68);}
+
+  /* steps row (how it works) */
+  .steps{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:var(--content-gap);}
+  .steps .s{flex:1;min-width:140px;background:var(--white);border-radius:12px;
+    padding:clamp(0.8rem,1.8vw,1.3rem);border-left:4px solid var(--cloud-68);}
+  .steps .s .n{font-family:var(--font-display);font-weight:600;color:var(--cloud-68);
+    font-size:var(--small-size);}
+  .steps .s .t{font-weight:700;color:var(--electric-15);margin-top:0.2rem;
+    font-size:var(--body-size);}
+  .steps .s .d{font-size:var(--small-size);color:var(--electric-50);margin-top:0.25rem;}
+
+  .footnote{position:absolute;bottom:clamp(0.8rem,2.5vh,1.6rem);left:var(--slide-padding);
+    font-size:var(--small-size);color:var(--electric-50);}
+
+  /* accent rule under headings */
+  h2 + .rule,.s-eyebrow + h1{margin-top:0;}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+<!-- ============ SLIDE 1 — Title ============ -->
+<section class="slide hero" data-accent="base" data-title="Title">
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">Data Readiness Assessment</div>
+    <h1 class="reveal">Old Dominion University <span style="color:var(--cloud-68)">×</span> Salesforce</h1>
+    <p class="lede reveal" style="color:var(--cloud-95);max-width:42ch;">A working session to connect your vision to a real data foundation.</p>
+    <div class="meta reveal">Kickoff &middot; DRA Architect: Werner Watschke</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 — Why we're here ============ -->
+<section class="slide" data-accent="base" data-title="Why we're here">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>01</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">Why we're here</div>
+    <h2 class="reveal">Toward One Monarch Nation — a unified, real-time, 360&deg; student experience</h2>
+    <ul class="bullet-list reveal">
+      <li>Grow <strong>online &amp; global enrollment</strong> and serve every student as one connected institution</li>
+      <li>Lift <strong>retention toward 82%</strong> and <strong>six-year graduation toward 57%</strong></li>
+      <li>Advance ODU's <strong>Carnegie R1</strong> research ambitions</li>
+    </ul>
+    <p class="reveal" style="margin-top:var(--content-gap);color:var(--electric-50);">This assessment starts from your goals — not our products.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3 — The tension ============ -->
+<section class="slide tension" data-accent="base" data-title="The tension">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>02</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">The tension</div>
+    <h2 class="reveal">Your aspiration is real-time. Your data foundation isn't there yet.</h2>
+    <div class="vs reveal">
+      <div class="col aspire">
+        <h3>The aspiration</h3>
+        <p>"Salesforce First" under the OMNI mandate — a unified platform powering a live, 360&deg; student experience.</p>
+      </div>
+      <div class="arrow">vs.</div>
+      <div class="col reality">
+        <h3>Today's reality</h3>
+        <p>The authoritative student data lives in <strong>Banner</strong> and moves in <strong>batches</strong> — student-facing systems see yesterday's data.</p>
+      </div>
+    </div>
+    <ul class="bullet-list reveal" style="margin-top:var(--content-gap);">
+      <li>The <strong>EVMS / health-sciences merger</strong> adds 1,440+ students and a second institution's systems</li>
+      <li><strong>SCHEV outcomes-based funding</strong> ties dollars to retention and time-to-degree</li>
+      <li>Rising <strong>AI &amp; agent</strong> expectations need live, trusted data</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4 — Trapped data, distinct demands ============ -->
+<section class="slide" data-accent="base" data-title="Trapped data">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>03</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">Trapped data, distinct demands</div>
+    <h2 class="reveal">Your data is spread across many systems — and pulled in many directions</h2>
+    <p class="reveal" style="color:var(--electric-50);">Where the data lives today:</p>
+    <div class="chips reveal">
+      <span class="chip">Banner (SIS)</span><span class="chip">Canvas (LMS)</span>
+      <span class="chip">Salesforce &times;3 orgs</span><span class="chip">Snowflake / analytics</span>
+      <span class="chip">Health-sciences systems</span>
+    </div>
+    <p class="reveal" style="color:var(--electric-50);margin-top:var(--content-gap);">What's demanding it:</p>
+    <div class="chips reveal">
+      <span class="chip demand">Reporting</span><span class="chip demand">AI &amp; agents</span>
+      <span class="chip demand">Business-user access</span><span class="chip demand">The student experience</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5 — Unlock / Trust / Activate ============ -->
+<section class="slide" data-accent="base" data-title="Unlock / Trust / Activate">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>04</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">The data foundation</div>
+    <h2 class="reveal">Unlock &rarr; Trust &rarr; Activate — and which tool plays where</h2>
+    <div class="blocks reveal">
+      <div class="block" data-b="unlock">
+        <div class="bname">Unlock</div>
+        <div class="bcaps">Connect &middot; Integrate &middot; Understand</div>
+        <div class="btool"><b>MuleSoft</b> real-time APIs &middot; <b>Informatica</b> bulk &middot; <b>Data&nbsp;360</b> zero-copy</div>
+      </div>
+      <div class="block" data-b="trust">
+        <div class="bname">Trust</div>
+        <div class="bcaps">Validate &middot; Protect &middot; Unify</div>
+        <div class="btool"><b>Informatica</b> quality, governance, MDM &middot; <b>Data&nbsp;360</b> identity</div>
+      </div>
+      <div class="block" data-b="activate">
+        <div class="bname">Activate</div>
+        <div class="bcaps">Decide &middot; Orchestrate &middot; Act</div>
+        <div class="btool"><b>Tableau</b> decide &middot; <b>MuleSoft</b> orchestrate &middot; agents act</div>
+      </div>
+    </div>
+    <p class="reveal" style="margin-top:var(--content-gap);color:var(--electric-50);">The "which tool, when?" swim lanes you've been asking for — capabilities first, products second.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6 — Business First, Technology Second ============ -->
+<section class="slide" data-accent="base" data-title="The DRA approach">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>05</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">How the DRA works</div>
+    <h2 class="reveal">Business first, technology second</h2>
+    <div class="flow reveal">
+      <span class="step">Business outcome</span><span class="sep">&rarr;</span>
+      <span class="step">Data challenges</span><span class="sep">&rarr;</span>
+      <span class="step">Capabilities required</span><span class="sep">&rarr;</span>
+      <span class="step">Solutions</span>
+    </div>
+    <ul class="bullet-list reveal" style="margin-top:var(--content-gap);">
+      <li>We assess <strong>nine capabilities</strong> across Unlock / Trust / Activate, and score them with evidence</li>
+      <li>You get a <strong>current- &amp; target-state architecture</strong>, a <strong>prioritized roadmap</strong>, and a <strong>business case</strong></li>
+      <li>This is a <strong>diagnostic you co-own</strong> — not a pitch</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 — Target use case ============ -->
+<section class="slide usecase" data-accent="unlock" data-title="Target use case">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>06</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">Target use case</div>
+    <div class="q reveal">"What's the status of <span class="hl">my application?</span>"</div>
+    <p class="reveal" style="margin-top:var(--content-gap);">A student asks once and gets a real, live answer spanning <strong>application, transcripts, FAFSA, and financial aid</strong> — powered by real-time <strong>Banner &harr; Salesforce</strong> data.</p>
+    <ul class="bullet-list reveal" style="margin-top:var(--content-gap);">
+      <li>High student-experience impact, and concrete enough to build</li>
+      <li>It exercises exactly the <strong>integration gap</strong> we need to solve first</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8 — Alignment & outcomes ============ -->
+<section class="slide" data-accent="trust" data-title="Alignment & outcomes">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>07</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">Alignment &amp; outcomes — the decision gate</div>
+    <h2 class="reveal">Let's confirm scope and define a "home run"</h2>
+    <ul class="bullet-list reveal">
+      <li>Confirm the <strong>focus area</strong> and define <strong>"home run" outcomes</strong> in ODU's words</li>
+      <li>Confirm <strong>executive sponsorship</strong> (Kirk Dewyea, CIO)</li>
+      <li>Confirm the <strong>internal champion / POC</strong> (Sai Nidumolu) and the working team</li>
+    </ul>
+    <p class="reveal" style="margin-top:var(--content-gap);color:var(--electric-50);">The one decision we want to leave today's session with: a clear yes on scope.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9 — How it works / what we ask ============ -->
+<section class="slide" data-accent="activate" data-title="What we'll ask of you">
+  <div class="chrome"><span><span class="dot"></span>ODU Data Readiness Assessment</span><span>08</span></div>
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">What we'll ask of you</div>
+    <h2 class="reveal">A light lift, on a ~4-week timeline</h2>
+    <div class="steps reveal">
+      <div class="s"><div class="n">Step 1</div><div class="t">Survey</div><div class="d">~10 min, per stakeholder</div></div>
+      <div class="s"><div class="n">Step 2</div><div class="t">Interviews</div><div class="d">30–60 min, remote</div></div>
+      <div class="s"><div class="n">Step 3</div><div class="t">Working session</div><div class="d">Half day, hands-on</div></div>
+      <div class="s"><div class="n">Step 4</div><div class="t">Executive readout</div><div class="d">Findings &amp; roadmap</div></div>
+    </div>
+    <p class="reveal" style="margin-top:var(--content-gap);color:var(--electric-50);">We'll be explicit about the weekly time commitment by group — it's designed to fit around your summer priorities.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10 — Next steps ============ -->
+<section class="slide hero" data-accent="base" data-title="Next steps">
+  <div class="slide-content">
+    <div class="s-eyebrow reveal">Next steps</div>
+    <h1 class="reveal" style="font-size:clamp(1.6rem,4.5vw,3.2rem);max-width:20ch;">One ask today: confirm scope and name anyone we're missing.</h1>
+    <ul class="bullet-list reveal" style="margin-top:var(--content-gap);">
+      <li style="color:var(--cloud-95)">Survey goes out to stakeholders</li>
+      <li style="color:var(--cloud-95)">Interviews scheduled with Sai + the account team</li>
+      <li style="color:var(--cloud-95)">Working session, then executive readout</li>
+    </ul>
+    <div class="tag reveal" style="margin-top:var(--content-gap);color:var(--cloud-80);">Old Dominion University &times; Salesforce &middot; Data Readiness Assessment</div>
+  </div>
+</section>
+
+<script>
+  /* ===========================================
+     SlidePresentation controller (frontend-slides pattern)
+     keyboard + touch + wheel nav, progress bar, nav dots,
+     intersection-observer reveals.
+     =========================================== */
+  class SlidePresentation {
+    constructor(){
+      this.slides=[...document.querySelectorAll('.slide')];
+      this.current=0;
+      this.progressBar=document.getElementById('progressBar');
+      this.navDots=document.getElementById('navDots');
+      this.buildDots();
+      this.observe();
+      this.keys();
+      this.wheelNav();
+      this.touch();
+      this.updateProgress();
+      window.addEventListener('scroll',()=>this.updateProgress(),{passive:true});
+    }
+    buildDots(){
+      this.navDots.innerHTML='';               // clear first (avoid dupes on re-open)
+      this.slides.forEach((s,i)=>{
+        const b=document.createElement('button');
+        b.setAttribute('aria-label','Go to slide '+(i+1));
+        b.addEventListener('click',()=>this.go(i));
+        this.navDots.appendChild(b);
+      });
+      this.dots=[...this.navDots.children];
+    }
+    observe(){
+      const io=new IntersectionObserver((es)=>{
+        es.forEach(e=>{
+          if(e.isIntersecting){
+            e.target.classList.add('visible');
+            this.current=this.slides.indexOf(e.target);
+            this.syncDots();
+          }
+        });
+      },{threshold:0.55});
+      this.slides.forEach(s=>io.observe(s));
+    }
+    syncDots(){this.dots.forEach((d,i)=>d.classList.toggle('active',i===this.current));}
+    go(i){if(i<0||i>=this.slides.length)return;this.slides[i].scrollIntoView({behavior:'smooth'});}
+    keys(){
+      document.addEventListener('keydown',(e)=>{
+        if(['ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();this.go(this.current+1);}
+        else if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();this.go(this.current-1);}
+        else if(e.key==='Home'){e.preventDefault();this.go(0);}
+        else if(e.key==='End'){e.preventDefault();this.go(this.slides.length-1);}
+      });
+    }
+    wheelNav(){
+      let lock=false;
+      window.addEventListener('wheel',(e)=>{
+        if(lock)return;if(Math.abs(e.deltaY)<30)return;
+        lock=true;this.go(this.current+(e.deltaY>0?1:-1));
+        setTimeout(()=>lock=false,700);
+      },{passive:true});
+    }
+    touch(){
+      let y0=null;
+      window.addEventListener('touchstart',e=>y0=e.touches[0].clientY,{passive:true});
+      window.addEventListener('touchend',e=>{
+        if(y0===null)return;const dy=y0-e.changedTouches[0].clientY;
+        if(Math.abs(dy)>50)this.go(this.current+(dy>0?1:-1));
+        y0=null;
+      },{passive:true});
+    }
+    updateProgress(){
+      const max=document.body.scrollHeight-window.innerHeight;
+      this.progressBar.style.width=(max>0?(window.scrollY/max*100):0)+'%';
+    }
+  }
+  document.querySelector('.slide').classList.add('visible'); // reveal first slide immediately
+  new SlidePresentation();
+</script>
+</body>
+</html>

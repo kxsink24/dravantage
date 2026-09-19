@@ -1,0 +1,28 @@
+INTERNAL SALESFORCE USE ONLY — LICENSED BRAND FONTS
+────────────────────────────────────────────────────
+
+This directory contains licensed Salesforce brand typefaces, served
+locally by ../index.html via @font-face:
+
+  - ITC Avant Garde for Salesforce (ITCAvantGardeStd-Demi.otf)
+      Licensed by Salesforce from ITC for internal use by Salesforce
+      employees and contractors.
+  - Salesforce Sans (SalesforceSans-*.ttf)
+      Proprietary Salesforce typeface, licensed for internal Salesforce
+      use only.
+
+Neither family may be:
+  - redistributed outside Salesforce,
+  - embedded in public web pages, or
+  - shipped to customers outside an approved Salesforce deliverable.
+
+This is acceptable here because the DRAVantage Vault is a PRIVATE
+repository under the sfdc-qbranch-emu organization. If this deck is ever
+hosted, it must be on a PRIVATE GitHub Pages site gated by EMU SSO (see
+the dra-deck skill's hosting section). If any deck folder containing these
+fonts would become public, the fonts must be removed and the CSS must fall
+back to the public-safe system stack.
+
+Canonical source: Salesforce Brand Central. Do not download from
+third-party font mirrors. Files mirrored here from the
+sfdc-qbranch-emu/VA-CCC-Architecture repository.
